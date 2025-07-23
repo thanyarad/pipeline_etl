@@ -1,0 +1,28 @@
+Query Response {'head': {'vars': ['s', 'p', 'o']}, 'results': {'bindings': [{'s': {'type': 'uri', 'value': 'https://a.in/sales/ontology'}, 'p': {'type': 'uri', 'value': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type'}, 'o': {'type': 'uri', 'value': 'http://www.w3.org/2002/07/owl#Ontology'}}, ...]}}
+
+{
+
+'classes': 
+    {
+        'Brand': {'brandID': 'string', 'brandName': 'string', 'manufacturer': 'string'}, 
+        'Customer': {'cusID': 'string', 'cusName': 'string', 'cusPhone': 'string', 'cusCity': 'string'}, 
+        'ProductClass': {'categoryID': 'string', 'categoryName': 'string', 'categoryCode': 'string', 'consumerSegment': 'string', 'seasonality': 'string'}, 
+        'ProductFamily': {'productFamilyID': 'string', 'productFamilyName': 'string', 'department': 'string', 'region': 'string'}, 
+        'ProductLine': {'productLineID': 'string', 'productLineName': 'string', 'targetAudience': 'string'}, 
+        'ProductType': {'productTypeID': 'string', 'productTypeName': 'string', 'variant': 'string', 'regulatoryTag': 'string'}, 
+        'SKU': {'skuID': 'string', 'skuName': 'string', 'upc': 'string', 'packSize': 'string', 'price': 'decimal', 'netWeight': 'decimal'}, 
+        'Sales': {'salesID': 'string', 'quantity': 'integer'}}, 
+
+'relation': {'belongsToProductFamily': {'domain': 'ProductClass', 'range': 'ProductFamily'}, 'belongsToProductClass': {'domain': 'ProductLine', 'range': 'ProductClass'}, 'belongsToProductLine': {'domain': 'ProductType', 'range': 'ProductLine'}, 'belongsToProductType': {'domain': 'Brand', 'range': 'ProductType'}, 'belongsToBrand': {'domain': 'SKU', 'range': 'Brand'}, 'includesSKU': {'domain': 'Sales', 'range': 'SKU'}, 'madeByCustomer': {'domain': 'Sales', 'range': 'Customer'}, 'hasProductClass': {'domain': 'ProductFamily', 'range': 'ProductClass'}, 'hasProductLine': {'domain': 'ProductClass', 'range': 'ProductLine'}, 'hasProductType': {'domain': 'ProductLine', 'range': 'ProductType'}, 'hasBrand': {'domain': 'ProductType', 'range': 'Brand'}, 'hasSKU': {'domain': 'Brand', 'range': 'SKU'}, 'isPartOfSales': {'domain': 'SKU', 'range': 'Sales'}, 'hasSales': {'domain': 'Customer', 'range': 'Sales'}}}
+
+Converting question to SPARQL: List all the products families and thier products available
+Error generating SPARQL: 'Input to ChatPromptTemplate is missing variables {"\'classes\'"}.  Expected: ["\'classes\'", \'question\'] Received: [\'question\']\nNote: if you intended {\'classes\'} to be part of the string and not a variable, please escape it with double curly braces like: \'{{\'classes\'}}\'.\nFor troubleshooting, visit: https://python.langchain.com/docs/troubleshooting/errors/INVALID_PROMPT_INPUT '
+
+Executing SPARQL query: SELECT 'Error generating SPARQL query' as ?error WHERE {}
+Error executing SPARQL query: 400 Client Error: Bad Request for url: https://sd-682b640b.stardog.cloud:5820/Sales/query
+SPARQL query executed successfully.
+
+Generating a human-readable answer.
+Error running query: "Input to ChatPromptTemplate is missing variables {''}.  Expected: [''] Received: []\nNote: if you intended {} to be part of the string and not a variable, please escape it with double curly braces like: '{{}}'.\nFor troubleshooting, visit: https://python.langchain.com/docs/troubleshooting/errors/INVALID_PROMPT_INPUT "
+
+Note: This requires a running Stardog instance with the appropriate data loaded.
