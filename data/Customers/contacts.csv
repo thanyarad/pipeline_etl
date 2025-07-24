@@ -1,0 +1,7 @@
+contact_id, customer_id, email, phone
+1, 1, rajesh.kumar@example.com, 9812345678
+2, 2, priya.sharma@example.com, 9823456789
+3, 3, anil.nair@example.com, 9834567890
+4, 4, meena.iyer@example.com, 9845678901
+5, 5, suresh.patil@example.com, 9856789012
+6, 6, kavita.singh@example.com, 9867890123

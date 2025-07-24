@@ -1,0 +1,6 @@
+source_id,source_code,name,is_pickup_location,address,location_id,email,phone
+101,FH01,FreshHarvest Nashik,TRUE,"Warehouse 1, Nashik",1,fhnashik@freshharvest.com,9011111111
+102,PG01,PureGrains Indore,FALSE,"Mill Yard, Indore",2,pgindore@puregrains.in,9022222222
+103,AQ01,AquaDrop Kochi,TRUE,"Beverage Center, Kochi",3,aqkochi@aquadrop.com,9033333333
+104,SW01,SpiceWorld Erode,TRUE,"Spice Mill, Erode",4,swerode@spiceworld.in,9044444444
+105,FH02,FreshHarvest Pune,FALSE,"Backup Hub, Pune",5,fhpune@freshharvest.com,9011111122

@@ -1,0 +1,7 @@
+stock_item_id,stock_id,product_id,quantity_on_hand,reorder_level,reorder_quantity,last_restock_date,safety_stock_level,stock_status
+1001,201,P1,500,100,200,2025-07-10,50,Available
+1002,201,P2,100,50,100,2025-07-08,30,Available
+1003,202,P3,250,80,150,2025-07-05,40,Available
+1004,203,P4,400,150,300,2025-07-12,100,Available
+1005,204,P5,600,200,500,2025-07-09,150,Available
+1006,205,P6,75,50,80,2025-07-11,25,Low

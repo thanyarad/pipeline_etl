@@ -1,0 +1,11 @@
+order_id, customer_id, order_date, order_status, total_amount, currency, payment_method, channel
+1, 1, 2025-07-15, Delivered, 190, INR, Credit Card, Online
+2, 1, 2025-07-20, Shipped, 400, INR, UPI, Online
+3, 2, 2025-07-18, Placed, 280, INR, Debit Card, Online
+4, 3, 2025-07-10, Delivered, 220, INR, Net Banking, Online
+5, 3, 2025-07-22, Placed, 400, INR, Credit Card, Online
+6, 4, 2025-01-10, Cancelled, 300, INR, UPI, Online
+7, 5, 2025-07-05, Delivered, 500, INR, Credit Card, Online
+8, 5, 2025-07-15, Shipped, 420, INR, Debit Card, Online
+9, 5, 2025-07-23, Placed, 360, INR, UPI, Online
+10, 6, 2025-07-21, Placed, 100, INR, Net Banking, Online

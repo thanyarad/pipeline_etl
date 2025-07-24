@@ -1,0 +1,7 @@
+customer_id, customer_name, registration_date, is_active, gender, latest_activity_date, no_of_sales_activities, age
+1, Rajesh Kumar, 2024-08-15, TRUE, M, 2025-07-20, 5, 35
+2, Priya Sharma, 2024-09-10, TRUE, F, 2025-07-22, 3, 28
+3, Anil Nair, 2024-10-05, TRUE, M, 2025-07-18, 4, 42
+4, Meena Iyer, 2024-11-20, FALSE, F, 2025-01-15, 2, 50
+5, Suresh Patil, 2025-01-10, TRUE, M, 2025-07-23, 6, 30
+6, Kavita Singh, 2025-02-28, TRUE, F, 2025-07-21, 1, 25

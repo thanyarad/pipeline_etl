@@ -1,0 +1,6 @@
+stock_id,stock_name,is_default,location_id
+201,FH Nashik Stock,TRUE,1
+202,PG Indore Stock,TRUE,2
+203,AQ Kochi Stock,TRUE,3
+204,SW Erode Stock,TRUE,4
+205,FH Pune Stock,FALSE,5
