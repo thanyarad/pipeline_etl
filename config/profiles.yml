@@ -1,0 +1,10 @@
+ecommerce_pipeline:
+  target: dev
+  outputs:
+    dev:
+      type: databricks
+      catalog: main
+      schema: ecommerce
+      host: <your_host_url>  
+      token: "{{ env_var('your_generated_token') }}"
+      http_path:  # Find in Databricks SQL Warehouse settings
