@@ -1,0 +1,53 @@
+retailer_pos_system:
+  retailer_inventory:
+    table: retailer_stock
+  retailer_customer:
+    table: retailer_customer
+  retailer_customer_order:
+    table: retailer_customer_order
+  retailer_customer_order_items:
+    table: retailer_customer_order_items
+  retailer_customer_invoice:
+    table: retailer_customer_invoice
+  retailer_store:
+    table: retailer_store
+  retailer_store_manager:
+    table: retailer_store_manager
+  retailer_store_employee:
+    table: retailer_store_employee
+  retailer_supplier:
+    table: retailer_supplier
+  retailer_supplier_sources:
+    table: retailer_supplier_sources
+  retailer_supplier_source:
+    table: retailer_supplier_source
+  retailer_supplier_purchases:
+    table: retailer_supplier_purchases
+  retailer_supplier_purchase_items:
+    table: retailer_supplier_purchase_items
+  retailer_supplier_invoice:
+    table: retailer_supplier_invoice
+  retailer_products:
+    table: retailer_products
+  shared_location:
+    table: location
+
+cpg_business:
+  cpg_manufacturer:
+    table: cpg_manufacturer
+  cpg_consumer:
+    table: cpg_consumer
+  cpg_product:
+    table: cpg_product
+  cpg_consumer_order:
+    table: cpg_consumer_order
+  cpg_order_items:
+    table: cpg_order_items
+  cpg_consumer_invoice:
+    table: cpg_consumer_invoice
+  cpg_product_inventory:
+    table: cpg_product_inventory
+  cpg_inventory_source:
+    table: cpg_inventory_source
+  cpg_supplier_contract:
+    table: cpg_supplier_contract
