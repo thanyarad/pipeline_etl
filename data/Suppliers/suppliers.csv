@@ -1,5 +1,0 @@
-supplier_id,supplier_name,company_name,last_activity_date,no_of_associated_deals,total_open_deal_value,rating,email,phone,location_id,address
-1,FreshHarvest Co.,FreshHarvest Consumer Goods,2025-07-22,8,2200000,4.6,contact@freshharvest.com,9811111111,1,"45, Market Yard, Nashik"
-2,PureGrains Ltd,PureGrains Agro Pvt Ltd,2025-07-21,5,1800000,4.3,info@puregrains.in,9822222222,2,"122, Agro Lane, Indore"
-3,AquaDrop Suppliers,AquaDrop Beverages Ltd,2025-07-19,6,2000000,4.5,support@aquadrop.com,9833333333,3,"3rd Street, Water Hub, Kochi"
-4,SpiceWorld Traders,SpiceWorld Traders LLP,2025-07-20,7,2500000,4.7,hello@spiceworld.in,9844444444,4,"78, Spice Market, Erode"

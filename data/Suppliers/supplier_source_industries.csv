@@ -1,7 +1,0 @@
-supplier_id,source_id,industry_id,is_active
-1,101,2,TRUE
-1,105,3,TRUE
-2,102,2,TRUE
-3,103,1,TRUE
-4,104,4,TRUE
-4,104,5,TRUE
