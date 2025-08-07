@@ -1,0 +1,50 @@
+[
+    {
+        "distributor_id": 1,
+        "distributor_name": "Metro Food & Beverage Distribution",
+        "company_name": "Metro Food & Beverage Distribution LLC",
+        "registration_date": "2024-08-15",
+        "last_activity_date": "2024-12-18",
+        "no_of_associated_deals": 15,
+        "total_open_deal_value": 485000.0,
+        "rating": 9,
+        "email": "partnerships@metrofoodbev.com",
+        "phone": "(312) 555-0201",
+        "city": "Chicago",
+        "state": "Illinois",
+        "country": "United States",
+        "address": "2500 Distribution Center Drive"
+    },
+    {
+        "distributor_id": 2,
+        "distributor_name": "Coastal Consumer Goods Distribution",
+        "company_name": "Coastal Consumer Goods Distribution Inc.",
+        "registration_date": "2024-07-20",
+        "last_activity_date": "2024-12-20",
+        "no_of_associated_deals": 22,
+        "total_open_deal_value": 620000.0,
+        "rating": 8,
+        "email": "sales@coastalcgd.com",
+        "phone": "(213) 555-0202",
+        "city": "Los Angeles",
+        "state": "California",
+        "country": "United States",
+        "address": "8800 Harbor Boulevard"
+    },
+    {
+        "distributor_id": 3,
+        "distributor_name": "Atlantic Wholesale Supply",
+        "company_name": "Atlantic Wholesale Supply Corporation",
+        "registration_date": "2024-09-15",
+        "last_activity_date": "2024-12-19",
+        "no_of_associated_deals": 18,
+        "total_open_deal_value": 550000.0,
+        "rating": 9,
+        "email": "procurement@atlanticwholesale.com",
+        "phone": "(404) 555-0203",
+        "city": "Atlanta",
+        "state": "Georgia",
+        "country": "United States",
+        "address": "1200 Commerce Parkway"
+    }
+]

@@ -24,7 +24,7 @@ def main():
     # Compile workflow
     app = build_workflow(agent)
     print("Stardog KG Agent workflow compiled successfully!")
-        
+    
     # Example queries to demonstrate memory
     queries = [
         "Get name of all students",
