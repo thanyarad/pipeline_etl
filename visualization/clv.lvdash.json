@@ -1,0 +1,118 @@
+{
+  "datasets": [
+    {
+      "name": "76c7d901",
+      "displayName": "gold_clv_consumer",
+      "queryLines": [
+        "SELECT * FROM cpg_industry.gold.gold_clv_consumer"
+      ]
+    },
+    {
+      "name": "d34bab19",
+      "displayName": "gold_clv_b2b",
+      "queryLines": [
+        "SELECT * FROM cpg_industry.gold.gold_clv_b2b"
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "name": "8b816cee",
+      "displayName": "Untitled page",
+      "layout": [
+        {
+          "widget": {
+            "name": "2c17e9ca",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "76c7d901",
+                  "fields": [
+                    {
+                      "name": "sum(lifespan_days)",
+                      "expression": "SUM(`lifespan_days`)"
+                    },
+                    {
+                      "name": "registration_date",
+                      "expression": "`registration_date`"
+                    },
+                    {
+                      "name": "sum(clv)",
+                      "expression": "SUM(`clv`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "line",
+              "encodings": {
+                "x": {
+                  "fieldName": "registration_date",
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "displayName": "registration_date"
+                },
+                "y": {
+                  "fieldName": "sum(clv)",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Sum of clv"
+                },
+                "color": {
+                  "fieldName": "sum(lifespan_days)",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Sum of lifespan_days"
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 8,
+            "width": 3,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "979efd32",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "d34bab19",
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "line",
+              "encodings": {}
+            }
+          },
+          "position": {
+            "x": 2,
+            "y": 1,
+            "width": 3,
+            "height": 7
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS"
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "widgetHeaderAlignment": "ALIGNMENT_UNSPECIFIED"
+    }
+  }
+}
