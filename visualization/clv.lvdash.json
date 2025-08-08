@@ -89,14 +89,39 @@
                 "name": "main_query",
                 "query": {
                   "datasetName": "d34bab19",
+                  "fields": [
+                    {
+                      "name": "lifespan_days",
+                      "expression": "`lifespan_days`"
+                    },
+                    {
+                      "name": "sum(avg_purchase_value)",
+                      "expression": "SUM(`avg_purchase_value`)"
+                    }
+                  ],
                   "disaggregated": false
                 }
               }
             ],
             "spec": {
               "version": 3,
-              "widgetType": "line",
-              "encodings": {}
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "lifespan_days",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "lifespan_days"
+                },
+                "y": {
+                  "fieldName": "sum(avg_purchase_value)",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Sum of avg_purchase_value"
+                }
+              }
             }
           },
           "position": {
