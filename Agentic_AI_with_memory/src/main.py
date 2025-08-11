@@ -24,10 +24,10 @@ def main():
     # Compile workflow
     app = build_workflow(agent)
     print("Stardog KG Agent workflow compiled successfully!")
-        
+
     # Example queries to demonstrate memory
     queries = [
-        "Get the product category names",
+        "Find all products that belong word ‘protein’ in keywords. For each product, I want to see its name, what it is about, how much it costs, and how well it’s rated on average. Please show the average rating rounded to two decimal places. Also, please list the products starting with the best-rated ones and if ratings are the same, show the cheaper products first.",
     ]
     
     for i, user_question in enumerate(queries, 1):
