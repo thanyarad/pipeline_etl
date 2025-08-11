@@ -21,18 +21,6 @@ class StardogClient:
             print(f"Error executing SPARQL query: {e}")
             return None
 
-    def update(self, sparql_update):
-        """Execute a SPARQL UPDATE query."""
-        try:
-            with stardog.Connection(self.database, **self.connection_details) as conn:
-                conn.begin()
-                conn.update(sparql_update)
-                conn.commit()
-                return True
-        except Exception as e:
-            print(f"Error executing SPARQL update: {e}")
-            return False
-
     def get_schema(self):
         """Get the ontology schema from the knowledge graph."""
         schema_details_query = f"""

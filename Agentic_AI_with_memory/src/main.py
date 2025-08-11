@@ -24,12 +24,10 @@ def main():
     # Compile workflow
     app = build_workflow(agent)
     print("Stardog KG Agent workflow compiled successfully!")
-    
+        
     # Example queries to demonstrate memory
     queries = [
-        "Get name of all students",
-        "Get city of all students who have mark greater than 80",
-        "Get name of all students"
+        "Get the product category names",
     ]
     
     for i, user_question in enumerate(queries, 1):

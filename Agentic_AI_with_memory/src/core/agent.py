@@ -205,7 +205,7 @@ Provide only the SPARQL query without any explanations. Use appropriate variable
         else:
             detail_note = "Provide balanced responses with appropriate detail level."
         
-        system = """You are an assistant that converts SPARQL query results into clear, natural language responses for an e-commerce knowledge graph system.
+        system = """You are an assistant that converts SPARQL query results into clear, natural language responses for the knowledge graph system.
 
 {context}
 
