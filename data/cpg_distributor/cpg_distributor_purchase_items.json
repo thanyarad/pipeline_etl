@@ -4,159 +4,159 @@
         "purchase_id": 1,
         "product_id": 1,
         "quantity_ordered": 500,
-        "unit_cost": 1.25,
-        "total_price": 625.0
+        "unit_cost": 1.89,
+        "total_price": 945.0
     },
     {
         "purchase_item_id": 2,
         "purchase_id": 1,
         "product_id": 2,
         "quantity_ordered": 1000,
-        "unit_cost": 1.35,
-        "total_price": 1350.0
+        "unit_cost": 2.19,
+        "total_price": 2190.0
     },
     {
         "purchase_item_id": 3,
         "purchase_id": 2,
         "product_id": 5,
         "quantity_ordered": 300,
-        "unit_cost": 4.25,
-        "total_price": 1275.0
+        "unit_cost": 6.79,
+        "total_price": 2037.0
     },
     {
         "purchase_item_id": 4,
         "purchase_id": 2,
         "product_id": 8,
         "quantity_ordered": 200,
-        "unit_cost": 4.65,
-        "total_price": 930.0
+        "unit_cost": 6.99,
+        "total_price": 1398.0
     },
     {
         "purchase_item_id": 5,
         "purchase_id": 3,
         "product_id": 3,
         "quantity_ordered": 150,
-        "unit_cost": 7.99,
-        "total_price": 1198.5
+        "unit_cost": 11.49,
+        "total_price": 1723.5
     },
     {
         "purchase_item_id": 6,
         "purchase_id": 3,
         "product_id": 10,
         "quantity_ordered": 250,
-        "unit_cost": 3.25,
-        "total_price": 812.5
+        "unit_cost": 4.99,
+        "total_price": 1247.5
     },
     {
         "purchase_item_id": 7,
         "purchase_id": 4,
         "product_id": 4,
         "quantity_ordered": 400,
-        "unit_cost": 3.75,
-        "total_price": 1500.0
+        "unit_cost": 5.49,
+        "total_price": 2196.0
     },
     {
         "purchase_item_id": 8,
         "purchase_id": 4,
         "product_id": 7,
         "quantity_ordered": 300,
-        "unit_cost": 3.15,
-        "total_price": 945.0
+        "unit_cost": 4.79,
+        "total_price": 1437.0
     },
     {
         "purchase_item_id": 9,
         "purchase_id": 5,
         "product_id": 6,
         "quantity_ordered": 600,
-        "unit_cost": 1.65,
-        "total_price": 990.0
+        "unit_cost": 2.59,
+        "total_price": 1554.0
     },
     {
         "purchase_item_id": 10,
         "purchase_id": 5,
         "product_id": 9,
         "quantity_ordered": 800,
-        "unit_cost": 1.35,
-        "total_price": 1080.0
+        "unit_cost": 2.19,
+        "total_price": 1752.0
     },
     {
         "purchase_item_id": 11,
         "purchase_id": 6,
         "product_id": 11,
         "quantity_ordered": 200,
-        "unit_cost": 4.25,
-        "total_price": 850.0
+        "unit_cost": 6.49,
+        "total_price": 1298.0
     },
     {
         "purchase_item_id": 12,
         "purchase_id": 6,
         "product_id": 12,
         "quantity_ordered": 350,
-        "unit_cost": 2.99,
-        "total_price": 1046.5
+        "unit_cost": 4.49,
+        "total_price": 1571.5
     },
     {
         "purchase_item_id": 13,
         "purchase_id": 7,
         "product_id": 1,
         "quantity_ordered": 750,
-        "unit_cost": 1.25,
-        "total_price": 937.5
+        "unit_cost": 1.89,
+        "total_price": 1417.5
     },
     {
         "purchase_item_id": 14,
         "purchase_id": 7,
         "product_id": 6,
         "quantity_ordered": 450,
-        "unit_cost": 1.65,
-        "total_price": 742.5
+        "unit_cost": 2.59,
+        "total_price": 1165.5
     },
     {
         "purchase_item_id": 15,
         "purchase_id": 8,
         "product_id": 2,
         "quantity_ordered": 600,
-        "unit_cost": 1.35,
-        "total_price": 810.0
+        "unit_cost": 2.19,
+        "total_price": 1314.0
     },
     {
         "purchase_item_id": 16,
         "purchase_id": 8,
         "product_id": 9,
         "quantity_ordered": 500,
-        "unit_cost": 1.35,
-        "total_price": 675.0
+        "unit_cost": 2.19,
+        "total_price": 1095.0
     },
     {
         "purchase_item_id": 17,
         "purchase_id": 9,
         "product_id": 4,
         "quantity_ordered": 250,
-        "unit_cost": 3.75,
-        "total_price": 937.5
+        "unit_cost": 5.49,
+        "total_price": 1372.5
     },
     {
         "purchase_item_id": 18,
         "purchase_id": 9,
         "product_id": 11,
         "quantity_ordered": 150,
-        "unit_cost": 4.25,
-        "total_price": 637.5
+        "unit_cost": 6.49,
+        "total_price": 973.5
     },
     {
         "purchase_item_id": 19,
         "purchase_id": 10,
         "product_id": 5,
         "quantity_ordered": 180,
-        "unit_cost": 4.25,
-        "total_price": 765.0
+        "unit_cost": 6.79,
+        "total_price": 1222.2
     },
     {
         "purchase_item_id": 20,
         "purchase_id": 10,
         "product_id": 12,
         "quantity_ordered": 220,
-        "unit_cost": 2.99,
-        "total_price": 657.8
+        "unit_cost": 4.49,
+        "total_price": 987.8
     }
 ]
