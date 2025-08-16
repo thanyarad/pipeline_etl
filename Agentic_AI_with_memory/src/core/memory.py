@@ -13,9 +13,10 @@ class MemoryEntry:
     question: str
     sparql_query: str
     query_result: str
-    relevance: str
+    relevance: str  # Keep for backward compatibility
     attempts: int
     sparql_error: bool
+    irrelevant_query: bool
     session_id: str
 
 class SessionMemory:
@@ -37,12 +38,44 @@ class SessionMemory:
         self.session_id = session_id or self._generate_session_id()
         self.conversation_history: deque = deque(maxlen=max_history)
         self.context_summary: str = ""
-        self.user_preferences: Dict[str, Any] = {}
+
         self.llm = llm
+        # Add schema storage for session-long caching
+        self._cached_schema: Optional[str] = None
+        self._schema_formatted: bool = False
         
     def _generate_session_id(self) -> str:
         """Generate a unique session ID."""
         return f"session_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+    
+    def set_schema(self, schema: str) -> None:
+        """
+        Set the cached schema for the session.
+        
+        Args:
+            schema: The formatted schema string
+        """
+        self._cached_schema = schema
+        self._schema_formatted = True
+        print(f"Schema cached for session: {self.session_id}")
+    
+    def get_schema(self) -> Optional[str]:
+        """
+        Get the cached schema for the session.
+        
+        Returns:
+            The cached schema string or None if not set
+        """
+        return self._cached_schema
+    
+    def has_schema(self) -> bool:
+        """
+        Check if schema is cached for this session.
+        
+        Returns:
+            True if schema is cached, False otherwise
+        """
+        return self._cached_schema is not None and self._schema_formatted
     
     def _check_semantic_similarity(self, question1: str, question2: str) -> float:
         """
@@ -164,7 +197,7 @@ Rate the semantic similarity (0.0 to 1.0):"""
         print(f"Checking cache for question: {question}")
         
         for entry in self.conversation_history:
-            if entry.relevance != "relevant" or entry.sparql_error:
+            if entry.irrelevant_query or entry.sparql_error:
                 continue
             
             # Use LLM-based semantic similarity
@@ -213,9 +246,10 @@ Rate the semantic similarity (0.0 to 1.0):"""
             question=state.get("question", ""),
             sparql_query=state.get("sparql_query", ""),
             query_result=result_summary,  # Store minimal summary to save memory
-            relevance=state.get("relevance", ""),
+            relevance="relevant" if not state.get("irrelevant_query", False) else "not_relevant",  # Backward compatibility
             attempts=state.get("attempts", 0),
             sparql_error=state.get("sparql_error", False),
+            irrelevant_query=state.get("irrelevant_query", False),
             session_id=self.session_id
         )
         self.conversation_history.append(entry)
@@ -231,12 +265,8 @@ Rate the semantic similarity (0.0 to 1.0):"""
         summary_parts = []
         
         for entry in recent_entries:
-            if entry.relevance == "relevant":
-                # Use SPARQL query if response is too long, otherwise use truncated response
-                if len(entry.query_result) > self.RESPONSE_LENGTH_LIMIT:
-                    summary_parts.append(f"User asked: '{entry.question}' - SPARQL: {entry.sparql_query[:100]}...")
-                else:
-                    summary_parts.append(f"User asked: '{entry.question}' - Result: {entry.query_result[:100]}...")
+            if not entry.irrelevant_query:
+                summary_parts.append(f"User asked: '{entry.question}' - SPARQL: {entry.sparql_query[:100]}...")
             else:
                 summary_parts.append(f"User asked unrelated question: '{entry.question}'")
         
@@ -255,93 +285,32 @@ Rate the semantic similarity (0.0 to 1.0):"""
         context_parts = [f"Session ID: {self.session_id}"]
         context_parts.append(f"Previous conversation context: {self.context_summary}")
         
-        # Add recent successful queries for reference
+        # Add recent successful queries for reference (only questions and SPARQL, no results)
         successful_queries = [
             entry for entry in self.conversation_history 
-            if entry.relevance == "relevant" and not entry.sparql_error
+            if not entry.irrelevant_query and not entry.sparql_error
         ][-2:]  # Last 2 successful queries
         
         if successful_queries:
             context_parts.append("Recent successful queries:")
             for entry in successful_queries:
                 context_parts.append(f"- Q: {entry.question}")
-                # Use SPARQL query if response is too long, otherwise use truncated response
-                if len(entry.query_result) > self.RESPONSE_LENGTH_LIMIT:
-                    context_parts.append(f"  SPARQL: {entry.sparql_query[:150]}...")
-                else:
-                    context_parts.append(f"  A: {entry.query_result[:150]}...")
+                context_parts.append(f"  SPARQL: {entry.sparql_query[:150]}...")
         
         return "\n".join(context_parts)
     
-    def get_user_preferences(self) -> Dict[str, Any]:
-        """Get user preferences based on conversation history."""
-        if len(self.conversation_history) == 0:
-            return {}
-        
-        # Analyze conversation patterns
-        preferences = {
-            "query_complexity": self._analyze_query_complexity(),
-            "preferred_detail_level": self._analyze_detail_preference()
-        }
-        
-        return preferences
-    
 
     
-    def _analyze_query_complexity(self) -> str:
-        """Analyze the complexity level of user queries."""
-        if len(self.conversation_history) == 0:
-            return "unknown"
-        
-        complex_queries = 0
-        total_queries = 0
-        
-        for entry in self.conversation_history:
-            if entry.relevance == "relevant":
-                total_queries += 1
-                # Simple complexity detection
-                if len(entry.question.split()) > 10 or "and" in entry.question.lower():
-                    complex_queries += 1
-        
-        if total_queries == 0:
-            return "unknown"
-        
-        complexity_ratio = complex_queries / total_queries
-        if complexity_ratio > 0.7:
-            return "high"
-        elif complexity_ratio > 0.3:
-            return "medium"
-        else:
-            return "low"
-    
-    def _analyze_detail_preference(self) -> str:
-        """Analyze user's preference for detail level in responses."""
-        if len(self.conversation_history) == 0:
-            return "medium"
-        
-        detail_levels = []
-        for entry in self.conversation_history:
-            if entry.relevance == "relevant" and entry.query_result:
-                result_length = len(entry.query_result)
-                if result_length > 500:
-                    detail_levels.append("high")
-                elif result_length > 200:
-                    detail_levels.append("medium")
-                else:
-                    detail_levels.append("low")
-        
-        if not detail_levels:
-            return "medium"
-        
-        # Return most common detail level
-        from collections import Counter
-        return Counter(detail_levels).most_common(1)[0][0]
+
+
     
     def clear_memory(self) -> None:
         """Clear all memory for the current session."""
         self.conversation_history.clear()
         self.context_summary = ""
-        self.user_preferences = {}
+
+        self._cached_schema = None
+        self._schema_formatted = False
     
     def export_memory(self) -> Dict[str, Any]:
         """Export memory data for persistence."""
@@ -350,7 +319,9 @@ Rate the semantic similarity (0.0 to 1.0):"""
             "max_history": self.max_history,
             "conversation_history": [asdict(entry) for entry in self.conversation_history],
             "context_summary": self.context_summary,
-            "user_preferences": self.user_preferences
+
+            "cached_schema": self._cached_schema,
+            "schema_formatted": self._schema_formatted
         }
     
     def set_llm(self, llm: BaseLanguageModel) -> None:
@@ -362,7 +333,9 @@ Rate the semantic similarity (0.0 to 1.0):"""
         self.session_id = memory_data.get("session_id", self.session_id)
         self.max_history = memory_data.get("max_history", self.max_history)
         self.context_summary = memory_data.get("context_summary", "")
-        self.user_preferences = memory_data.get("user_preferences", {})
+
+        self._cached_schema = memory_data.get("cached_schema")
+        self._schema_formatted = memory_data.get("schema_formatted", False)
         
         # Reconstruct conversation history
         self.conversation_history.clear()

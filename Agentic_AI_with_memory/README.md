@@ -1,139 +1,433 @@
-# Stardog Knowledge Graph Agentic AI
+# Agentic AI with Memory - Knowledge Graph Assistant
 
-## What is this project?
+## Overview
 
-This is an **Agentic AI system** that autonomously interacts with your **knowledge graph** (a database that stores information in a connected way). Unlike a simple chatbot, this AI agent can:
+This is an advanced **Agentic AI system** that provides intelligent, context-aware interactions with knowledge graphs using Stardog. Unlike traditional chatbots, this system features autonomous decision-making, persistent memory, semantic caching, and sophisticated workflow orchestration.
 
--   **Make autonomous decisions** about how to process your requests
--   **Orchestrate complex workflows** with multiple steps and decision points
--   **Learn and adapt** from previous interactions
--   **Self-correct** when things go wrong
--   **Plan and execute** multi-step reasoning processes
+## 🏗️ System Architecture
 
-Think of it as an intelligent assistant that doesn't just answer questions, but actively thinks through problems and takes actions to solve them.
-
-## How does it work?
-
-1. **You ask a question** in normal English (like "Get name of all students")
-2. **The agent autonomously decides** the best approach to handle your request
-3. **It orchestrates a workflow** that may include caching, relevance checking, query generation, and execution
-4. **It makes intelligent decisions** at each step based on context and previous interactions
-5. **It adapts and learns** from each interaction to improve future responses
-6. **It provides you** with a clear, human-readable answer
-
-## Key Features
-
--   **Agentic AI**: Autonomous decision-making and workflow orchestration
--   **Memory System**: Remembers conversations and builds context over time
--   **Query Caching**: Intelligently reuses similar queries for efficiency
--   **Knowledge Graph Integration**: Seamlessly works with Stardog databases
--   **Relevance Checking**: Autonomous filtering of relevant vs irrelevant queries
--   **Error Recovery**: Self-correcting with retry mechanisms and fallback strategies
--   **Workflow Orchestration**: Complex multi-step processing with conditional logic
--   **Learning & Adaptation**: Improves responses based on interaction history
-
-## Project Structure
+### Core Components
 
 ```
-src/
-├── core/           # Core agent components (agent, client, memory)
-├── config/         # Settings and configuration
-├── workflow/       # Agentic workflow orchestration
-├── utils/          # Helper functions
-└── test/           # Tests to ensure agent reliability
+┌──────────────────────────────────────────────────────┐
+│                    Agentic AI System                 │
+├──────────────────────────────────────────────────────┤
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐   │
+│  │   Memory    │  │    Agent    │  │   Client    │   │
+│  │   Manager   │  │    Core     │  │  (Stardog)  │   │
+│  └─────────────┘  └─────────────┘  └─────────────┘   │
+├──────────────────────────────────────────────────────┤
+│  ┌─────────────┐  ┌────────────┐  ┌─────────────┐    │
+│  │  Workflow   │  │    LLM     │  │  Utils &    │    │
+│  │   Graph     │  │  Manager   │  │ Formatting  │    │
+│  └─────────────┘  └────────────┘  └─────────────┘    │
+└──────────────────────────────────────────────────────┘
 ```
 
-## Quick Start
+### Component Details
 
-### 1. Install Dependencies
+#### 1. **StardogAgent** (`src/core/agent.py`)
 
-```bash
-pip install -r requirements.txt
+The central intelligence unit that orchestrates all operations:
+
+-   **Natural Language Processing**: Converts user questions to SPARQL queries
+-   **Query Execution**: Manages database interactions
+-   **Response Generation**: Creates human-readable answers
+-   **Error Handling**: Implements retry mechanisms and fallback strategies
+-   **Memory Integration**: Updates and utilizes conversation history
+
+#### 2. **SessionMemory** (`src/core/memory.py`)
+
+Advanced memory system with semantic capabilities:
+
+-   **Session Persistence**: Maintains context across conversation turns
+-   **Semantic Caching**: Uses LLM-based similarity to cache similar queries
+-   **Schema Caching**: Stores knowledge graph schema for session efficiency
+-   **Context Building**: Creates conversation summaries for better responses
+-   **Memory Management**: Efficient storage with configurable limits
+
+#### 3. **StardogClient** (`src/core/client.py`)
+
+Database interface layer:
+
+-   **Connection Management**: Handles Stardog database connections
+-   **Query Execution**: Executes SPARQL queries with reasoning
+-   **Schema Retrieval**: Fetches and formats knowledge graph schema
+-   **Error Handling**: Manages database-level errors
+
+#### 4. **Workflow Graph** (`src/workflow/graph.py`)
+
+Intelligent routing and decision-making:
+
+-   **Conditional Logic**: Routes requests based on context and state
+-   **Cache Integration**: Checks for similar previous queries
+-   **Error Recovery**: Implements retry mechanisms
+-   **Result Formatting**: Routes to appropriate output formatters
+
+#### 5. **LLM Manager** (`src/core/llm_manager.py`)
+
+Centralized LLM provider management:
+
+-   **Provider Abstraction**: Supports multiple LLM providers (OpenAI, Google, etc.)
+-   **Configuration Management**: Handles API keys, models, and settings
+-   **Default Provider**: Provides fallback to default LLM when no specific provider is requested
+-   **Flexible Initialization**: Allows easy switching between different LLM providers
+
+## 🔄 Workflow Architecture
+
+### Processing Pipeline
+
+```
+┌─────────────────┐
+│ User Querying   │ ← Get the user query as input
+└─────────────────┘
+     ↓
+┌─────────────────┐
+│ Cache Check     │ ← Check for similar previous queries
+└─────────────────┘
+     ↓
+┌─────────────────┐
+│ NL to SPARQL    │ ← Convert natural language to database query
+└─────────────────┘
+     ↓
+┌─────────────────┐
+│ Query Execution │ ← Execute against knowledge graph
+└─────────────────┘
+     ↓
+┌─────────────────┐
+│ Result Routing  │ ← Decide on output format
+└─────────────────┘
+     ↓
+┌─────────────────┐
+│ Response Gen    │ ← Generate human-readable answer
+└─────────────────┘
+     ↓
+┌─────────────────┐
+│ Memory Update   │ ← Store interaction for future use
+└─────────────────┘
 ```
 
-### 2. Set up Environment Variables
+### Decision Points
 
-Create a `.env` file in the project root:
+1. **Cache Hit Detection**: Uses semantic similarity to identify reusable queries
+2. **Relevance Filtering**: Determines if query is related to knowledge graph data
+3. **Error Recovery**: Implements retry logic for failed queries
+4. **Result Formatting**: Chooses between table format and natural language based on result size
+
+## 🧠 Memory System Architecture
+
+### Memory Components
+
+```python
+@dataclass
+class MemoryEntry:
+    timestamp: str           # When the interaction occurred
+    question: str           # Original user question
+    sparql_query: str       # Generated SPARQL query
+    query_result: str       # Result summary (optimized for memory)
+    attempts: int           # Number of retry attempts
+    sparql_error: bool      # Whether query failed
+    irrelevant_query: bool  # Whether query was relevant
+    session_id: str         # Session identifier
+```
+
+### Semantic Caching Algorithm
+
+1. **Similarity Calculation**: Uses LLM to compute semantic similarity between questions
+2. **Threshold Matching**: Requires 80% similarity for cache hits
+3. **Fallback Mechanism**: Uses Jaccard similarity if LLM unavailable
+4. **Cache Storage**: Stores SPARQL queries for re-execution (not results)
+
+### Memory Features
+
+-   **Session Persistence**: Maintains context across conversation turns
+-   **Schema Caching**: Stores knowledge graph schema for efficiency
+-   **Context Summarization**: Creates conversation summaries for LLM context
+-   **Memory Limits**: Configurable maximum history size (default: 10 entries)
+
+## 🔧 Configuration System
+
+### Environment Variables
 
 ```env
-# Stardog Database Settings
+# Stardog Configuration
 STARDOG_ENDPOINT=http://localhost:5820
 STARDOG_DATABASE=your_database_name
 STARDOG_USERNAME=admin
 STARDOG_PASSWORD=admin
 
-# OpenAI Settings
+# LLM Configuration
 OPENAI_API_KEY=your_openai_api_key
 OPENAI_MODEL=gpt-3.5-turbo
 DEFAULT_LLM_PROVIDER=openai
+
+# Google AI Configuration (Optional)
+# GOOGLE_API_KEY=your_google_api_key
+# GOOGLE_MODEL=gemini-pro
+
+# System Configuration
+MAX_HISTORY=10
+SIMILARITY_THRESHOLD=0.8
+RESPONSE_LENGTH_LIMIT=200
 ```
 
-### 3. Run the Application
+### Settings Management (`src/config/settings.py`)
 
-**Option 1: Using the batch file (Windows)**
+-   **Database Configuration**: Stardog connection parameters
+-   **LLM Configuration**: Model selection and API settings
+-   **System Parameters**: Memory limits, similarity thresholds
+-   **SPARQL Prefixes**: Common RDF prefixes for query generation
 
-```bash
-run_main.bat
+### Supported LLM Models
+
+#### **OpenAI Models**
+
+-   **Primary Model**: `gpt-3.5-turbo` (default)
+-   **Alternative Models**: `gpt-4`, `gpt-4-turbo`, `gpt-3.5-turbo-16k`
+-   **Configuration**: Set via `OPENAI_MODEL` environment variable
+
+#### **Google AI Models** (Currently Commented Out)
+
+-   **Primary Model**: `gemini-pro`
+-   **Configuration**: Set via `GOOGLE_MODEL` environment variable
+-   **Status**: Ready for implementation, requires uncommenting in `llm_manager.py`
+
+#### **LLM Manager Features**
+
+-   **Provider Selection**: Choose between OpenAI and Google AI
+-   **Model Configuration**: Customize temperature, base URLs, and API settings
+-   **Fallback Mechanism**: Automatic fallback to default provider
+-   **Extensible Design**: Easy to add new LLM providers
+
+## 📊 Data Flow
+
+### Query Processing Flow
+
+1. **Input Reception**: User question received in natural language
+2. **Cache Check**: System checks for semantically similar previous queries
+3. **Query Generation**: LLM converts question to SPARQL using schema context
+4. **Execution**: SPARQL query executed against Stardog with reasoning
+5. **Result Processing**: Raw results formatted and analyzed
+6. **Response Generation**: Human-readable answer created with context
+7. **Memory Update**: Interaction stored for future reference
+
+### Memory Integration
+
+```python
+# Memory is integrated at multiple points:
+1. Schema caching for session efficiency
+2. Query similarity checking for cache hits
+3. Conversation context for better responses
+4. Learning from successful/failed interactions
 ```
 
-**Option 2: Using Python directly**
+### LLM Manager Integration
 
-```bash
-python src/main.py
+```python
+# LLM Manager is used throughout the system:
+1. Agent initialization with flexible provider selection
+2. Memory system for semantic similarity calculations
+3. Query generation with configurable model parameters
+4. Response generation with context-aware processing
+5. Testing and development with consistent LLM instances
 ```
 
-## How the Agentic AI Processes Questions
+## 🚀 Usage Examples
 
-The agent follows an intelligent workflow with autonomous decision-making:
+### Basic Usage
 
-1. **Cache Check**: Agent decides whether to use cached results (uses same sparql query) or generate new ones
-2. **Relevance Check**: Autonomous filtering to determine if the question is relevant
-3. **Query Generation**: Intelligent conversion of natural language to database queries (sparql)
-4. **Execution**: Autonomous execution with error handling
-5. **Answer Generation**: Context-aware response generation
-6. **Memory Update**: Learning from the interaction for future improvements
-7. **Error Recovery**: Self-correcting mechanisms when things go wrong
+```python
+from src.core.client import StardogClient
+from src.core.agent import StardogAgent
+from src.core.memory import SessionMemory
+from src.core.llm_manager import get_default_llm, get_llm_provider
 
-## Requirements
+# Initialize components
+client = StardogClient(endpoint, database, username, password)
 
--   Python 3.8+
--   Stardog database server running
--   OpenAI API key
--   Internet connection (for AI model access)
+# Initialize agent with default LLM (OpenAI)
+agent = StardogAgent(client)
 
-## Testing
+# Or specify a different LLM provider
+# agent = StardogAgent(client, llm_provider="openai")
 
-Run the tests to ensure the agent works reliably:
+# Initialize memory with LLM for semantic similarity
+memory = SessionMemory(max_history=10, llm=agent.llm)
+agent.memory = memory
+
+# Process questions
+result = agent.process_question("Show me all products with protein in keywords")
+print(result)
+```
+
+### Advanced Usage with Workflow
+
+```python
+from src.workflow.graph import build_workflow
+
+# Build and compile workflow
+app = build_workflow(agent)
+
+# Process with full workflow
+result = app.invoke({
+    "question": "Find products with high ratings and low prices",
+    "attempts": 1
+})
+```
+
+### Memory Management
+
+```python
+# Check memory status
+memory_info = agent.get_memory_info()
+print(f"Session: {memory_info['session_id']}")
+print(f"Conversations: {memory_info['conversation_count']}")
+
+# Clear memory
+agent.clear_memory()
+
+# Export/Import memory
+memory_data = memory.export_memory()
+memory.import_memory(memory_data)
+```
+
+### LLM Provider Management
+
+```python
+from src.core.llm_manager import get_llm_provider, get_available_providers
+
+# Get available LLM providers
+providers = get_available_providers()
+print(f"Available providers: {providers}")
+
+# Initialize specific LLM provider
+openai_llm = get_llm_provider("openai")
+google_llm = get_llm_provider("google")  # If enabled
+
+# Custom LLM configuration
+custom_config = {
+    "temperature": 0.7,
+    "model": "gpt-4",
+    "api_key": "your_custom_key"
+}
+custom_llm = get_llm_provider("openai", config=custom_config)
+```
+
+## 🧪 Testing
+
+### Test Structure
+
+```
+src/test/
+├── memory_test.py          # Memory system tests
+├── stardog_test.py         # Database connection tests
+└── test_cache_similarity.py # Cache similarity tests
+```
+
+### Running Tests
 
 ```bash
 # Windows
 run_tests.bat
 
-# Or directly
+# Direct execution
 python -m pytest src/test/
 ```
 
-## What You Need to Know
+## 📈 Performance Features
 
--   **Agentic AI**: This system makes autonomous decisions and orchestrates complex workflows
--   **Stardog**: The knowledge graph database that the agent interacts with
--   **OpenAI API**: Powers the agent's reasoning and decision-making capabilities
--   **Memory**: The agent learns and adapts from conversations over time
--   **Workflow Orchestration**: Complex multi-step processing with intelligent routing
+### Optimization Strategies
 
-## Troubleshooting
+1. **Schema Caching**: Reduces database calls for schema information
+2. **Semantic Caching**: Avoids redundant query generation
+3. **Memory Limits**: Prevents memory overflow in long sessions
+4. **Result Summarization**: Stores minimal data for memory efficiency
+5. **LLM Fallbacks**: Graceful degradation when LLM unavailable
+6. **LLM Provider Optimization**: Efficient model selection and configuration
+7. **Query Caching**: Reuses successful SPARQL queries for similar questions
 
--   **"Stardog connection failed"**: Make sure your Stardog server is running and the connection details are correct
--   **"OpenAI API error"**: Check your API key and internet connection
--   **"No relevant data found"**: Make sure your question is related to the data in your knowledge graph
+### Scalability Considerations
 
-## Project Files Explained
+-   **Session Isolation**: Each session has independent memory
+-   **Configurable Limits**: Adjustable memory and cache sizes
+-   **Error Recovery**: Robust handling of failures
+-   **Resource Management**: Efficient memory usage patterns
 
--   `main.py`: Entry point that initializes and runs the agentic AI system
--   `agent.py`: The core agent with autonomous decision-making capabilities
--   `client.py`: Connects the agent to your Stardog database
--   `memory.py`: Enables the agent to learn and remember interactions
--   `graph.py`: Defines the agentic workflow with autonomous routing
--   `settings.py`: Configuration for the agent's behavior
+## 🔍 Troubleshooting
 
-This project demonstrates how AI agents can autonomously interact with knowledge graphs, making intelligent decisions and learning from each interaction to provide increasingly better assistance!
+### Common Issues
+
+1. **Stardog Connection Failed**
+
+    - Verify Stardog server is running
+    - Check connection parameters in settings
+    - Ensure database exists and is accessible
+
+2. **LLM API Errors**
+
+    - Verify API key is valid
+    - Check internet connectivity
+    - Ensure sufficient API credits
+
+3. **Memory Issues**
+
+    - Reduce `MAX_HISTORY` setting
+    - Clear memory periodically
+    - Monitor memory usage
+
+4. **Query Generation Failures**
+    - Check schema accessibility
+    - Verify SPARQL syntax
+    - Review LLM model configuration
+    - Verify LLM provider settings and API keys
+
+## 🛠️ Development
+
+### Project Structure
+
+```
+Agentic_AI_with_memory/
+├── src/
+│   ├── core/              # Core system components
+│   │   ├── agent.py       # Main agent logic
+│   │   ├── client.py      # Database client
+│   │   ├── memory.py      # Memory management
+│   │   ├── llm_manager.py # LLM integration
+│   │   └── models.py      # Data models
+│   ├── config/            # Configuration
+│   │   └── settings.py    # System settings
+│   ├── workflow/          # Workflow orchestration
+│   │   └── graph.py       # Processing graph
+│   ├── utils/             # Utilities
+│   │   └── formatting.py  # Output formatting
+│   └── test/              # Test suite
+├── main.py                # Entry point
+├── requirements.txt       # Dependencies
+└── README.md             # This file
+```
+
+### Adding New Features
+
+1. **New Memory Types**: Extend `MemoryEntry` dataclass
+2. **Additional LLM Providers**: Implement in `llm_manager.py`
+3. **Custom Workflows**: Add nodes to workflow graph
+4. **Enhanced Caching**: Extend similarity algorithms
+5. **New LLM Models**: Add support for additional models in `llm_manager.py`
+6. **Provider-Specific Features**: Implement provider-specific optimizations
+
+## 📚 Dependencies
+
+### Core Dependencies
+
+-   **langchain**: LLM integration and workflow management
+-   **langgraph**: Workflow orchestration and state management
+-   **requests**: HTTP client for API interactions
+-   **tabulate**: Table formatting for results
+-   **python-dotenv**: Environment variable management
+
+### Optional Dependencies
+
+-   **pytest**: Testing framework
+-   **jupyter**: Notebook support for development
+
+---

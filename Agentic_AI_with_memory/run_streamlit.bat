@@ -1,0 +1,6 @@
+@echo off
+echo Starting Stardog Knowledge Graph Agent Streamlit App...
+echo.
+echo Starting Streamlit app...
+streamlit run streamlit_app.py
+pause

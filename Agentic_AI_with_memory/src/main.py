@@ -27,6 +27,7 @@ def main():
 
     # Example queries to demonstrate memory
     queries = [
+        "Who is Albert Einstein?",
         "Find all products that belong word ‘protein’ in keywords. For each product, I want to see its name, what it is about, how much it costs, and how well it’s rated on average. Please show the average rating rounded to two decimal places. Also, please list the products starting with the best-rated ones and if ratings are the same, show the cheaper products first.",
     ]
     
@@ -39,8 +40,6 @@ def main():
             # Show memory info
             memory_info = agent.get_memory_info()
             print(f"Memory Info - Session: {memory_info['session_id']}, Conversations: {memory_info['conversation_count']}")
-            if memory_info['user_preferences']:
-                print(f"User Preferences: {memory_info['user_preferences']}")
             
         except Exception as e:
             print(f"Error running query: {e}")

@@ -12,6 +12,8 @@ class StardogAgent:
         self.client = client
         self.llm = self._initialize_llm(llm_provider)
         self.memory = memory or SessionMemory(llm=self.llm)
+        # Initialize schema for the session
+        self._initialize_session_schema()
 
     def _initialize_llm(self, llm_provider: str = None):
         """Initialize LLM using the specified provider or default."""
@@ -20,31 +22,45 @@ class StardogAgent:
         else:
             return get_default_llm()
 
+    def _initialize_session_schema(self):
+        """Initialize the schema for the session and cache it in memory."""
+        if not self.memory.has_schema():
+            print("Initializing schema for new session...")
+            formatted_schema = self.client.get_formatted_schema()
+            if formatted_schema:
+                self.memory.set_schema(formatted_schema)
+                print("Schema initialized and cached for session.")
+            else:
+                print("Warning: Failed to initialize schema for session.")
+        else:
+            print("Using cached schema from existing session.")
+
     def get_kg_schema(self):
-        """Get a formatted schema summary with classes and relationships."""
-        schema = self.client.get_schema()
-        if schema:
-            classes_with_properties = {}
-            relationships = {}
-            for cls in schema['classes']:
-                classes_with_properties[cls] = {}
-            for prop_name, prop_info in schema['datatype_properties'].items():
-                domain = prop_info.get('domain')
-                range_type = prop_info.get('range', 'string')
-                if range_type and 'XMLSchema#' in range_type:
-                    range_type = range_type.split('#')[-1]
-                elif range_type and range_type.startswith('http://'):
-                    range_type = range_type.split('/')[-1].split('#')[-1]
-                if domain and domain in classes_with_properties:
-                    classes_with_properties[domain][prop_name] = range_type
-            for relationship, rel_info in schema['object_properties'].items():
-                domain = rel_info.get('domain')
-                range_obj = rel_info.get('range')
-                relationships[relationship] = {'domain': domain, 'range': range_obj}
-            schema_dict = {'classes': classes_with_properties, 'relation': relationships}
-            schema_str = str(schema_dict).replace("{", "{{").replace("}", "}}")
-            return schema_str
-        return None
+        """Get the cached schema from memory for the session."""
+        schema = self.memory.get_schema()
+        if schema is None:
+            # Fallback: try to get schema if not cached
+            print("Schema not cached, fetching from database...")
+            formatted_schema = self.client.get_formatted_schema()
+            if formatted_schema:
+                self.memory.set_schema(formatted_schema)
+                return formatted_schema
+            else:
+                print("Error: Could not retrieve schema from database.")
+                return None
+        return schema
+
+    def refresh_schema(self):
+        """Refresh the schema cache by fetching from database."""
+        print("Refreshing schema cache...")
+        formatted_schema = self.client.get_formatted_schema()
+        if formatted_schema:
+            self.memory.set_schema(formatted_schema)
+            print("Schema cache refreshed successfully.")
+            return True
+        else:
+            print("Error: Failed to refresh schema cache.")
+            return False
 
     def check_query_cache(self, state: AgentState) -> AgentState:
         """Check if the question can be answered from cache."""
@@ -64,64 +80,19 @@ class StardogAgent:
         
         return state
 
-    def check_relevance(self, state: AgentState) -> AgentState:
-        question = state["question"]
-        
-        # If we have a cached response, skip relevance check entirely
-        if state.get("cached_response", False):
-            print(f"Using cached response, skipping relevance check for: {question}")
-            state["relevance"] = "relevant"  # Assume cached responses are relevant
-            return state
-        
-        schema = self.get_kg_schema()
-        conversation_context = self.memory.get_conversation_context()
-        print(f"Checking relevance of the question: {question}")
-        
-        system = """You are an assistant that determines whether a given question is related to the following knowledge graph schema.
 
-Schema:
-{schema}
-
-{context}
-Consider the conversation context when determining relevance. If the question is a follow-up or clarification to a previous relevant question, mark it as relevant.
-
-Respond with only "relevant" or "not_relevant".
-""".format(schema=schema, context=conversation_context if conversation_context else "")
-        
-        human = f"Question: {question}"
-        check_prompt = ChatPromptTemplate.from_messages([("system", system), ("human", human)])
-        relevance_checker = check_prompt | self.llm | StrOutputParser()
-        try:
-            relevance_response = relevance_checker.invoke({})
-            relevance_response = relevance_response.strip().lower()
-            state["relevance"] = "not_relevant" if "not_relevant" in relevance_response else "relevant"
-            print(f"Relevance determined: {state['relevance']}")
-        except Exception as e:
-            print(f"Error checking relevance: {str(e)}")
-            state["relevance"] = "relevant"
-        return state
 
     def convert_nl_to_sparql(self, state: AgentState) -> AgentState:
         question = state["question"]
         schema = self.get_kg_schema()
         conversation_context = self.memory.get_conversation_context()
-        user_preferences = self.memory.get_user_preferences()
         print(f"Converting question to SPARQL: {question}")
-        
-        # Adapt query complexity based on user preferences
-        complexity_note = ""
-        if user_preferences.get("query_complexity") == "high":
-            complexity_note = "The user prefers complex, detailed queries. Provide comprehensive SPARQL queries."
-        elif user_preferences.get("query_complexity") == "low":
-            complexity_note = "The user prefers simple, straightforward queries. Keep SPARQL queries concise."
         
         system = """You are an assistant that converts natural language questions into SPARQL queries based on the following knowledge graph schema:
 
 {schema}
 
 {context}
-
-{complexity_note}
 
 Understand the relationships between the classes and properties.
 Include FROM {from_data} in the SPARQL query after the SELECT clause and before the WHERE clause.
@@ -131,15 +102,26 @@ Use these common prefixes:
 
 Consider the conversation context when generating queries. If this is a follow-up question, reference previous successful queries for consistency.
 
+IMPORTANT: Only respond with "IRRELEVANT_QUERY" if the question is completely unrelated to the knowledge graph data (e.g., weather, sports, general knowledge, etc.). If the question is related to the data but you're unsure about the exact query structure, still attempt to generate a SPARQL query.
+
 Provide only the SPARQL query without any explanations. Use appropriate variable names and include necessary JOINs via triple patterns.
 """.format(schema=schema, context=conversation_context if conversation_context else "", 
-           complexity_note=complexity_note, prefixes=PREFIXES, from_data=EXECUTE_FROM_STARDOG)
+           prefixes=PREFIXES, from_data=EXECUTE_FROM_STARDOG)
         
         convert_prompt = ChatPromptTemplate.from_messages([("system", system), ("human", "Question: {question}")])
         sparql_generator = convert_prompt | self.llm | StrOutputParser()
         try:
             sparql_query = sparql_generator.invoke({"question": question})
             sparql_query = sparql_query.strip()
+            
+            # Check if the LLM determined the query is irrelevant
+            if "IRRELEVANT_QUERY" in sparql_query.upper():
+                print("LLM determined query is irrelevant to knowledge graph schema.")
+                state["sparql_query"] = ""
+                state["sparql_error"] = False
+                state["irrelevant_query"] = True
+                return state
+            
             if sparql_query.startswith("```sparql"):
                 sparql_query = sparql_query.replace("```sparql", "").replace("```", "").strip()
             elif sparql_query.startswith("```"):
@@ -147,11 +129,15 @@ Provide only the SPARQL query without any explanations. Use appropriate variable
             if not sparql_query.startswith("PREFIX"):
                 sparql_query = PREFIXES + "\n" + sparql_query
             state["sparql_query"] = sparql_query
+            state["sparql_error"] = False
+            state["irrelevant_query"] = False
             print(f"Generated SPARQL query: {state['sparql_query']}")
         except Exception as e:
             print(f"Error generating SPARQL: {str(e)}")
+            # This is a technical error, not an irrelevant query
             state["sparql_query"] = "SELECT 'Error generating SPARQL query' as ?error WHERE {}"
             state["sparql_error"] = True
+            state["irrelevant_query"] = False
         return state
 
     def execute_sparql(self, state: AgentState) -> AgentState:
@@ -192,26 +178,14 @@ Provide only the SPARQL query without any explanations. Use appropriate variable
         query_results = state.get("query_results", [])
         sparql_error = state.get("sparql_error", False)
         conversation_context = self.memory.get_conversation_context()
-        user_preferences = self.memory.get_user_preferences()
         print("Generating a human-readable answer.")
-        
-        # Adapt response detail level based on user preferences
-        detail_note = ""
-        if user_preferences.get("preferred_detail_level") == "high":
-            detail_note = "Provide detailed, comprehensive responses with all relevant information."
-        elif user_preferences.get("preferred_detail_level") == "low":
-            detail_note = "Provide concise, to-the-point responses."
-        else:
-            detail_note = "Provide balanced responses with appropriate detail level."
         
         system = """You are an assistant that converts SPARQL query results into clear, natural language responses for the knowledge graph system.
 
 {context}
 
-{detail_note}
-
 Consider the conversation context when formulating responses. If this is a follow-up question, reference previous information appropriately.
-""".format(context=conversation_context if conversation_context else "", detail_note=detail_note)
+""".format(context=conversation_context if conversation_context else "")
         
         if sparql_error:
             generate_prompt = ChatPromptTemplate.from_messages([
@@ -255,15 +229,11 @@ Consider the conversation context when formulating responses. If this is a follo
             state["attempts"] += 1
         return state
 
-    def generate_funny_response(self, state: AgentState) -> AgentState:
-        print("Generating a funny response for an unrelated question.")
-        system = """You are a charming and funny assistant who responds in a playful manner about knowledge graphs."""
-        human_message = "I can not help with that, but doesn't asking questions make you curious about fascinating knowledge connections? You can always explore some interesting relationships in our knowledge graph!"
-        funny_prompt = ChatPromptTemplate.from_messages([("system", system), ("human", human_message)])
-        funny_response = funny_prompt | self.llm | StrOutputParser()
-        message = funny_response.invoke({})
-        state["query_result"] = message
-        print("Generated funny response.")
+    def generate_irrelevant_response(self, state: AgentState) -> AgentState:
+        """Generate a hardcoded response for irrelevant queries."""
+        print("Query is not relevant to the knowledge graph schema.")
+        state["query_result"] = "I'm sorry, but I cannot process this query as it's not related to the knowledge graph data. Please ask questions about the available data in the knowledge graph, such as products, customers, orders, or inventory information."
+        print("Generated hardcoded irrelevant response.")
         return state
     
     def update_memory(self, state: AgentState) -> AgentState:
@@ -277,8 +247,8 @@ Consider the conversation context when formulating responses. If this is a follo
         return {
             "session_id": self.memory.session_id,
             "conversation_count": len(self.memory.conversation_history),
-            "user_preferences": self.memory.get_user_preferences(),
-            "context_summary": self.memory.context_summary
+            "context_summary": self.memory.context_summary,
+            "schema_cached": self.memory.has_schema()
         }
     
     def clear_memory(self) -> None:

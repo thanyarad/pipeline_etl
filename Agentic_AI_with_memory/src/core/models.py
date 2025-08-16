@@ -6,5 +6,8 @@ class AgentState(TypedDict):
     query_result: str
     query_results: list
     attempts: int
-    relevance: str
+    relevance: str  # Keep for backward compatibility
     sparql_error: bool
+    irrelevant_query: bool
+    cached_response: bool
+    cache_similarity: float

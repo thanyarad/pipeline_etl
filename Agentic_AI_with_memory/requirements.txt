@@ -14,3 +14,6 @@ tabulate
 
 # Utilities
 typing-extensions
+
+# Web Interface
+streamlit>=1.28.0

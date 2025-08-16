@@ -82,3 +82,29 @@ class StardogClient:
                 'raw_result': schema_result
             }
         return None
+
+    def get_formatted_schema(self):
+        """Get a formatted schema summary with classes and relationships."""
+        schema = self.get_schema()
+        if schema:
+            classes_with_properties = {}
+            relationships = {}
+            for cls in schema['classes']:
+                classes_with_properties[cls] = {}
+            for prop_name, prop_info in schema['datatype_properties'].items():
+                domain = prop_info.get('domain')
+                range_type = prop_info.get('range', 'string')
+                if range_type and 'XMLSchema#' in range_type:
+                    range_type = range_type.split('#')[-1]
+                elif range_type and range_type.startswith('http://'):
+                    range_type = range_type.split('/')[-1].split('#')[-1]
+                if domain and domain in classes_with_properties:
+                    classes_with_properties[domain][prop_name] = range_type
+            for relationship, rel_info in schema['object_properties'].items():
+                domain = rel_info.get('domain')
+                range_obj = rel_info.get('range')
+                relationships[relationship] = {'domain': domain, 'range': range_obj}
+            schema_dict = {'classes': classes_with_properties, 'relation': relationships}
+            schema_str = str(schema_dict).replace("{", "{{").replace("}", "}}")
+            return schema_str
+        return None

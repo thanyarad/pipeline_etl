@@ -5,9 +5,11 @@ def format_result_router(state: AgentState) -> dict:
     """Decides whether to format results as a table or generate a human-readable answer based on result size."""
     query_results = state.get("query_results", [])
     sparql_error = state.get("sparql_error", False)
+    sparql_query = state.get("sparql_query", "")
     print(f"Routing result format: {len(query_results)} results found.")
     RESULT_THRESHOLD = 15
 
+    # Check if there's a SPARQL error (relevant query but failed to execute)
     if sparql_error:
         print("SPARQL error detected, routing to regenerate_query.")
         return {"next_step": "regenerate_query", "query_result": state["query_result"]}
