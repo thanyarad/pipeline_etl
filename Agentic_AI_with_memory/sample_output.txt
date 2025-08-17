@@ -16,7 +16,8 @@ No cache hit for: Get name of all students
 Checking relevance of the question: Get name of all students
 Relevance determined: relevant
 Converting question to SPARQL: Get name of all students
-Generated SPARQL query: PREFIX ins: <https://a.in/sales/CRUD_Ontology#>
+Generated SPARQL query: 
+PREFIX ins: <https://a.in/sales/CRUD_Ontology#>
 PREFIX owl: <http://www.w3.org/2002/07/owl#>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
@@ -32,24 +33,9 @@ WHERE {
   ?student rdf:type ins:Student ;
            ins:name ?name .
 }
-Executing SPARQL query: PREFIX ins: <https://a.in/sales/CRUD_Ontology#>
-PREFIX owl: <http://www.w3.org/2002/07/owl#>
-PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-PREFIX so: <https://schema.org/>
-PREFIX stardog: <tag:stardog:api:>
-PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-PREFIX : <http://api.stardog.com/>
-PREFIX ins_data: <https://a.in/sales/CRUD_data#>
-
-SELECT ?name
-FROM <https://a.in/sales/CRUD_data>
-WHERE {
-  ?student rdf:type ins:Student ;
-           ins:name ?name .
-}
-Executed Result {'head': {'vars': ['name']}, 'results': {'bindings': [{'name': {'type': 'literal', 'value': 'Alice'}}, {'name': {'type': 'literal', 'value': 'Judy'}}, {'name': {'type': 'literal', 'value': 'Kyle'}}, {'name': {'type': 'literal', 'value': 'Liam'}}, {'name': {'type': 'literal', 'value': 'Mia'}}, {'name': {'type': 'literal', 'value': 'Nina'}}, {'name': {'type': 'literal', 'value': 'Omar'}}, {'name': {'type': 'literal', 'value': 'Paul'}}, {'name': {'type': 'literal', 'value': 'Quin'}}, {'name': {'type': 'literal', 'value': 'Rita'}}, {'name': {'type': 'literal', 'value': 'Sean'}}, {'name': {'type': 'literal', 'value': 'Bob'}}, {'name': {'type': 'literal', 'value': 'Tina'}}, {'name': {'type': 'literal', 'value': 'Carol'}}, {'name': {'type': 'literal', 'value': 'Dan'}}, {'name': {'type': 'literal', 'value': 'Eve'}}, {'name': {'type': 'literal', 'value': 'Frank'}}, {'name': {'type': 'literal', 'value': 'Grace'}}, {'name': {'type': 'literal', 'value': 'Holly'}}, {'name': {'type': 'literal', 'value': 'Ian'}}]}}
-Raw SPARQL Query Result: [{'name': {'type': 'literal', 'value': 'Alice'}}, {'name': {'type': 'literal', 'value': 'Judy'}}, {'name': {'type': 'literal', 'value': 'Kyle'}}, {'name': {'type': 'literal', 'value': 'Liam'}}, {'name': {'type': 'literal', 'value': 'Mia'}}, {'name': {'type': 'literal', 'value': 'Nina'}}, {'name': {'type': 'literal', 'value': 'Omar'}}, {'name': {'type': 'literal', 'value': 'Paul'}}, {'name': {'type': 'literal', 'value': 'Quin'}}, {'name': {'type': 'literal', 'value': 'Rita'}}, {'name': {'type': 'literal', 'value': 'Sean'}}, {'name': {'type': 'literal', 'value': 'Bob'}}, {'name': {'type': 'literal', 'value': 'Tina'}}, {'name': {'type': 'literal', 'value': 'Carol'}}, {'name': {'type': 'literal', 'value': 'Dan'}}, {'name': {'type': 'literal', 'value': 'Eve'}}, {'name': {'type': 'literal', 'value': 'Frank'}}, {'name': {'type': 'literal', 'value': 'Grace'}}, {'name': {'type': 'literal', 'value': 'Holly'}}, {'name': {'type': 'literal', 'value': 'Ian'}}]
+Executing SPARQL query: ...
+Executed Result {'head': {'vars': ['name']}, 'results': {'bindings': [{'name': {'type': 'literal', 'value': 'Alice'}}, ...]}
+Raw SPARQL Query Result: [{'name': {'type': 'literal', 'value': 'Alice'}}, ...]
 SPARQL SELECT query executed successfully.
 Routing result format: 20 results found.
 Large result set detected, formatting as table.
@@ -101,7 +87,6 @@ Result:
 | Ian    |
 +--------+
 Memory Info - Session: session_20250805_003736, Conversations: 1
-User Preferences: {'query_complexity': 'low', 'preferred_detail_level': 'low'}
 
 === Query 2: Get city of all students who have mark greater than 80 ===
 Checking cache for question: Get city of all students who have mark greater than 80
@@ -111,7 +96,8 @@ No cache hit for: Get city of all students who have mark greater than 80
 Checking relevance of the question: Get city of all students who have mark greater than 80
 Relevance determined: relevant
 Converting question to SPARQL: Get city of all students who have mark greater than 80
-Generated SPARQL query: PREFIX ins: <https://a.in/sales/CRUD_Ontology#>
+Generated SPARQL query: 
+PREFIX ins: <https://a.in/sales/CRUD_Ontology#>
 PREFIX owl: <http://www.w3.org/2002/07/owl#>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
@@ -147,8 +133,8 @@ WHERE {
            ins:city ?city .
   FILTER(?mark > 80)
 }
-Executed Result {'head': {'vars': ['city']}, 'results': {'bindings': [{'city': {'type': 'literal', 'value': 'New York'}}, {'city': {'type': 'literal', 'value': 'Austin'}}, {'city': {'type': 'literal', 'value': 'Jacksonville'}}, {'city': {'type': 'literal', 'value': 'Columbus'}}, {'city': {'type': 'literal', 'value': 'Indianapolis'}}, {'city': {'type': 'literal', 'value': 'San Francisco'}}, {'city': {'type': 'literal', 'value': 'Denver'}}, {'city': {'type': 'literal', 'value': 'Boston'}}, {'city': {'type': 'literal', 'value': 'Los Angeles'}}, {'city': {'type': 'literal', 'value': 'Nashville'}}, {'city': {'type': 'literal', 'value': 'Houston'}}, {'city': {'type': 'literal', 'value': 'Phoenix'}}, {'city': {'type': 'literal', 'value': 'Dallas'}}, {'city': {'type': 'literal', 'value': 'San Jose'}}, {'city': {'type': 'literal', 'value': 'San Antonio'}}]}}
-Raw SPARQL Query Result: [{'city': {'type': 'literal', 'value': 'New York'}}, {'city': {'type': 'literal', 'value': 'Austin'}}, {'city': {'type': 'literal', 'value': 'Jacksonville'}}, {'city': {'type': 'literal', 'value': 'Columbus'}}, {'city': {'type': 'literal', 'value': 'Indianapolis'}}, {'city': {'type': 'literal', 'value': 'San Francisco'}}, {'city': {'type': 'literal', 'value': 'Denver'}}, {'city': {'type': 'literal', 'value': 'Boston'}}, {'city': {'type': 'literal', 'value': 'Los Angeles'}}, {'city': {'type': 'literal', 'value': 'Nashville'}}, {'city': {'type': 'literal', 'value': 'Houston'}}, {'city': {'type': 'literal', 'value': 'Phoenix'}}, {'city': {'type': 'literal', 'value': 'Dallas'}}, {'city': {'type': 'literal', 'value': 'San Jose'}}, {'city': {'type': 'literal', 'value': 'San Antonio'}}]
+Executed Result {'head': {'vars': ['city']}, 'results': {'bindings': [{'city': {'type': 'literal', 'value': 'New York'}}, ...}
+Raw SPARQL Query Result: [{'city': {'type': 'literal', 'value': 'New York'}}, ...]
 SPARQL SELECT query executed successfully.
 Routing result format: 15 results found.
 Small result set, routing to generate_human_readable_answer.
@@ -156,7 +142,8 @@ Generating a human-readable answer.
 Generated human-readable answer.
 Memory entry added: Get city of all students who have mark greater than 80 -> 2 total entries
 Memory updated for session: session_20250805_003736
-Result: Fifteen students have achieved marks above 80. They come from a total of 15 different cities; the first five are:
+Result: 
+Fifteen students have achieved marks above 80. They come from a total of 15 different cities; the first five are:
 - New York
 - Austin
 - Jacksonville
@@ -165,7 +152,6 @@ Result: Fifteen students have achieved marks above 80. They come from a total of
 
 (If you’d like the complete list of all 15 cities, just let me know.)
 Memory Info - Session: session_20250805_003736, Conversations: 2
-User Preferences: {'query_complexity': 'medium', 'preferred_detail_level': 'low'}
 
 === Query 3: Get name of all students ===
 Checking cache for question: Get name of all students
@@ -174,7 +160,8 @@ Similarity with 'Get city of all students who have mark greater than 80': 0.40
 Query cache hit! Similarity: 1.00
 Cached question: Get name of all students
 Using cached SPARQL query for: Get name of all students
-Executing SPARQL query: PREFIX ins: <https://a.in/sales/CRUD_Ontology#>
+Executing SPARQL query: 
+PREFIX ins: <https://a.in/sales/CRUD_Ontology#>
 PREFIX owl: <http://www.w3.org/2002/07/owl#>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
@@ -190,8 +177,8 @@ WHERE {
   ?student rdf:type ins:Student ;
            ins:name ?name .
 }
-Executed Result {'head': {'vars': ['name']}, 'results': {'bindings': [{'name': {'type': 'literal', 'value': 'Alice'}}, {'name': {'type': 'literal', 'value': 'Judy'}}, {'name': {'type': 'literal', 'value': 'Kyle'}}, {'name': {'type': 'literal', 'value': 'Liam'}}, {'name': {'type': 'literal', 'value': 'Mia'}}, {'name': {'type': 'literal', 'value': 'Nina'}}, {'name': {'type': 'literal', 'value': 'Omar'}}, {'name': {'type': 'literal', 'value': 'Paul'}}, {'name': {'type': 'literal', 'value': 'Quin'}}, {'name': {'type': 'literal', 'value': 'Rita'}}, {'name': {'type': 'literal', 'value': 'Sean'}}, {'name': {'type': 'literal', 'value': 'Bob'}}, {'name': {'type': 'literal', 'value': 'Tina'}}, {'name': {'type': 'literal', 'value': 'Carol'}}, {'name': {'type': 'literal', 'value': 'Dan'}}, {'name': {'type': 'literal', 'value': 'Eve'}}, {'name': {'type': 'literal', 'value': 'Frank'}}, {'name': {'type': 'literal', 'value': 'Grace'}}, {'name': {'type': 'literal', 'value': 'Holly'}}, {'name': {'type': 'literal', 'value': 'Ian'}}]}}
-Raw SPARQL Query Result: [{'name': {'type': 'literal', 'value': 'Alice'}}, {'name': {'type': 'literal', 'value': 'Judy'}}, {'name': {'type': 'literal', 'value': 'Kyle'}}, {'name': {'type': 'literal', 'value': 'Liam'}}, {'name': {'type': 'literal', 'value': 'Mia'}}, {'name': {'type': 'literal', 'value': 'Nina'}}, {'name': {'type': 'literal', 'value': 'Omar'}}, {'name': {'type': 'literal', 'value': 'Paul'}}, {'name': {'type': 'literal', 'value': 'Quin'}}, {'name': {'type': 'literal', 'value': 'Rita'}}, {'name': {'type': 'literal', 'value': 'Sean'}}, {'name': {'type': 'literal', 'value': 'Bob'}}, {'name': {'type': 'literal', 'value': 'Tina'}}, {'name': {'type': 'literal', 'value': 'Carol'}}, {'name': {'type': 'literal', 'value': 'Dan'}}, {'name': {'type': 'literal', 'value': 'Eve'}}, {'name': {'type': 'literal', 'value': 'Frank'}}, {'name': {'type': 'literal', 'value': 'Grace'}}, {'name': {'type': 'literal', 'value': 'Holly'}}, {'name': {'type': 'literal', 'value': 'Ian'}}]
+Executed Result {'head': {'vars': ['name']}, 'results': {'bindings': [{'name': {'type': 'literal', 'value': 'Alice'}}, ...]}
+Raw SPARQL Query Result: [{'name': {'type': 'literal', 'value': 'Alice'}}, ...]
 SPARQL SELECT query executed successfully.
 Routing result format: 20 results found.
 Large result set detected, formatting as table.
@@ -243,7 +230,6 @@ Result:
 | Ian    |
 +--------+
 Memory Info - Session: session_20250805_003736, Conversations: 3
-User Preferences: {'query_complexity': 'medium', 'preferred_detail_level': 'low'}
 
 === Clearing Memory ===
 Memory cleared.
