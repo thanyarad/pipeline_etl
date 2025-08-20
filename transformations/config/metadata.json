@@ -1,0 +1,13 @@
+{
+  "catalog": "cpg_industry",
+  "bronze_schema": "bronze",
+  "silver_schema": "silver",
+  "gold_supply": "gold_supply",
+  "gold_product": "gold_product",
+  "gold_sales": "gold_sales",
+  "users": [
+    "thanyarkottary2003@gmail.com",
+    "mugunthan2783@gmail.com",
+    "ajgladwin2802@gmail.com"
+  ]
+}
