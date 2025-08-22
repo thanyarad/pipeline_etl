@@ -7,7 +7,7 @@ pydantic>=2.0.0
 python-dotenv>=1.0.0
 
 # Knowledge Graph
-stardog
+pystardog
 
 # Data processing
 tabulate
@@ -17,3 +17,7 @@ typing-extensions
 
 # Web Interface
 streamlit>=1.28.0
+
+# Backend API
+flask>=2.3.0
+flask-cors>=4.0.0
