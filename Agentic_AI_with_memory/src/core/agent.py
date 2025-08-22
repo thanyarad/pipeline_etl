@@ -152,10 +152,11 @@ Provide only the SPARQL query without any explanations. Use appropriate variable
                     state["query_results"] = bindings
                     print(f"Raw SPARQL Query Result: {state['query_results']}")
                     formatted_results = []
-                    for binding in bindings[:5]:
+                    for binding in bindings:
                         result_dict = {var: value.get('value', str(value)) for var, value in binding.items()}
                         formatted_results.append(result_dict)
-                    formatted_result = str(formatted_results) if len(bindings) <= 5 else f"Showing first 5 of {len(bindings)} results:\n{formatted_results}"
+                    # formatted_result = str(formatted_results) if len(bindings) <= 5 else f"Showing first 5 of {len(bindings)} results:\n{formatted_results}"
+                    formatted_result = str(formatted_results)
                 else:
                     state["query_results"] = []
                     formatted_result = "No results found."

@@ -300,6 +300,8 @@ def initialize_agent():
         return None, None, f"Failed to initialize agent: {str(e)}"
 
 def main():
+
+    data_path = "https://product.org/product_catalog/apparel#"
     # Main container
     st.markdown('<div class="main-container">', unsafe_allow_html=True)
     
@@ -453,14 +455,14 @@ def main():
                                                     # Extract the actual value from the SPARQL binding
                                                     value = value_obj.get('value', str(value_obj))
                                                     # Remove the data prefix if it exists
-                                                    if isinstance(value, str) and value.startswith('https://ph.org/prod/data#'):
-                                                        value = value.replace('https://ph.org/prod/data#', '')
+                                                    if isinstance(value, str) and value.startswith(data_path):
+                                                        value = value.replace(data_path, '')
                                                     row[col] = value
                                                 else:
                                                     value = str(value_obj)
                                                     # Remove the data prefix if it exists
-                                                    if value.startswith('https://ph.org/prod/data#'):
-                                                        value = value.replace('https://ph.org/prod/data#', '')
+                                                    if value.startswith(data_path):
+                                                        value = value.replace(data_path, '')
                                                     row[col] = value
                                             data.append(row)
                                         

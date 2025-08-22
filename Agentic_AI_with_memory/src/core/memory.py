@@ -239,7 +239,7 @@ Rate the semantic similarity (0.0 to 1.0):"""
         if raw_results:
             result_summary = f"Found {len(raw_results)} results"
         else:
-            result_summary = query_result[:100] + "..." if len(query_result) > 100 else query_result
+            result_summary = query_result[:500] + "..." if len(query_result) > 500 else query_result
         
         entry = MemoryEntry(
             timestamp=datetime.now().isoformat(),
@@ -266,7 +266,7 @@ Rate the semantic similarity (0.0 to 1.0):"""
         
         for entry in recent_entries:
             if not entry.irrelevant_query:
-                summary_parts.append(f"User asked: '{entry.question}' - SPARQL: {entry.sparql_query[:100]}...")
+                summary_parts.append(f"User asked: '{entry.question}' - SPARQL: {entry.sparql_query[:500]}...")
             else:
                 summary_parts.append(f"User asked unrelated question: '{entry.question}'")
         
@@ -295,7 +295,7 @@ Rate the semantic similarity (0.0 to 1.0):"""
             context_parts.append("Recent successful queries:")
             for entry in successful_queries:
                 context_parts.append(f"- Q: {entry.question}")
-                context_parts.append(f"  SPARQL: {entry.sparql_query[:150]}...")
+                context_parts.append(f"  SPARQL: {entry.sparql_query[:300]}...")
         
         return "\n".join(context_parts)
     
