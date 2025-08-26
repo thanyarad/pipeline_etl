@@ -2,7 +2,6 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import sys
 import os
-import json
 from datetime import datetime
 
 # Add the project root to the Python path
@@ -75,8 +74,11 @@ def chat():
         # Get memory info
         memory_info = agent.get_memory_info()
         
+        # Prepare response data with enhanced memory and result formatting
         response = {
             'response': result.get('query_result', 'No response generated'),
+            'response_large': result.get('query_result_large'),  # For tabulated large results
+            'response_small': result.get('query_result_small'),  # For human-readable responses
             'sparql_query': result.get('sparql_query', ''),
             'timestamp': datetime.now().isoformat(),
             'memory_info': {
@@ -156,7 +158,13 @@ def get_status():
             'message': 'Connected to Stardog' if connected else 'Disconnected from Stardog',
             'memory_info': {
                 'session_id': memory_info.get('session_id'),
-                'conversation_count': memory_info.get('conversation_count', 0)
+                'conversation_count': memory_info.get('conversation_count', 0),
+                'schema_cached': memory_info.get('schema_cached', False),
+                'context_summary': agent.memory.context_summary
+            },
+            'agent_info': {
+                'llm_provider': agent.llm.__class__.__name__,
+                'memory_max_history': agent.memory.max_history
             }
         })
         

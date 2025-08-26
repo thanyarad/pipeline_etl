@@ -8,7 +8,6 @@ from flask import Flask, send_from_directory, request, jsonify
 from flask_cors import CORS
 import sys
 import os
-import json
 from datetime import datetime
 
 # Add the project root to the Python path
@@ -20,13 +19,16 @@ from src.core.memory import SessionMemory
 from src.workflow.graph import build_workflow
 from src.config.settings import STARDOG_ENDPOINT, STARDOG_DATABASE, STARDOG_USERNAME, STARDOG_PASSWORD
 
-app = Flask(__name__, static_folder='frontend')
+app = Flask(__name__)
 CORS(app)
 
 # Global variables to store the agent and workflow
 stardog_client = None
 agent = None
 workflow = None
+
+# Get absolute path to the frontend directory
+FRONTEND_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'frontend')
 
 def initialize_agent():
     """Initialize the Stardog agent and workflow"""
@@ -56,11 +58,15 @@ def initialize_agent():
 # Serve frontend files
 @app.route('/')
 def serve_frontend():
-    return send_from_directory('frontend', 'index.html')
+    return send_from_directory(FRONTEND_DIR, 'index.html')
 
 @app.route('/<path:path>')
 def serve_static(path):
-    return send_from_directory('frontend', path)
+    try:
+        return send_from_directory(FRONTEND_DIR, path)
+    except Exception as e:
+        print(f"Error serving static file {path}: {e}")
+        return f"File not found: {path}", 404
 
 # API endpoints
 @app.route('/api/health', methods=['GET'])
@@ -93,11 +99,15 @@ def chat():
         
         response = {
             'response': result.get('query_result', 'No response generated'),
+            'response_large': result.get('query_result_large'),  # For tabulated large results
+            'response_small': result.get('query_result_small'),  # For human-readable responses
             'sparql_query': result.get('sparql_query', ''),
             'timestamp': datetime.now().isoformat(),
             'memory_info': {
                 'session_id': memory_info.get('session_id'),
-                'conversation_count': memory_info.get('conversation_count', 0)
+                'conversation_count': memory_info.get('conversation_count', 0),
+                'schema_cached': memory_info.get('schema_cached', False),
+                'context_summary': agent.memory.context_summary
             }
         }
         
@@ -172,7 +182,13 @@ def get_status():
             'message': 'Connected to Stardog' if connected else 'Disconnected from Stardog',
             'memory_info': {
                 'session_id': memory_info.get('session_id'),
-                'conversation_count': memory_info.get('conversation_count', 0)
+                'conversation_count': memory_info.get('conversation_count', 0),
+                'schema_cached': memory_info.get('schema_cached', False),
+                'context_summary': agent.memory.context_summary
+            },
+            'agent_info': {
+                'llm_provider': agent.llm.__class__.__name__,
+                'memory_max_history': agent.memory.max_history
             }
         })
         

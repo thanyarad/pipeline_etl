@@ -18,10 +18,6 @@ pip install -r requirements.txt
 
 REM Start the development server
 echo.
-echo Starting development server...
-echo Frontend: http://localhost:5000
-echo API: http://localhost:5000/api
-echo.
 echo Press Ctrl+C to stop the server
 echo.
 python dev_server.py

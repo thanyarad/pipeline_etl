@@ -20,13 +20,15 @@ PREFIX stardog: <tag:stardog:api:>
 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 PREFIX : <http://api.stardog.com/>
 PREFIX Prod_Ont: <https://ph.org/prod/ontology#>
-PREFIX Prod_data: <https://ph.org/prod/data#>
+PREFIX Prod_data: <https://ph.org/prod/apparel#>
 PREFIX Product_catalog: <https://product.org/product_catalog/ontology#>
 """
+# PREFIX Prod_data: <https://ph.org/prod/data#>
 
 # Ontology schema for product
 
 SCHEMA_FROM_STARDOG = "<https://product.org/product_catalog/ontology>"
+# EXECUTE_FROM_STARDOG = "<https://product.org/product_catalog/electronics>"
 EXECUTE_FROM_STARDOG = "<https://product.org/product_catalog/apparel>"
 
 

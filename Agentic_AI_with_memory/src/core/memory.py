@@ -1,4 +1,4 @@
-from typing import List, Dict, Any, Optional
+from typing import Dict, Any, Optional
 from datetime import datetime
 from dataclasses import dataclass, asdict
 from collections import deque
@@ -12,7 +12,9 @@ class MemoryEntry:
     timestamp: str
     question: str
     sparql_query: str
-    query_result: str
+    query_result: str  # Keep for backward compatibility
+    query_result_large: Any  # For large result sets (tabulated)
+    query_result_small: Any  # For human readable answers
     relevance: str  # Keep for backward compatibility
     attempts: int
     sparql_error: bool
@@ -230,23 +232,20 @@ Rate the semantic similarity (0.0 to 1.0):"""
         Args:
             state: The agent state dictionary
         """
-        # Store only essential information to save memory
-        # Store SPARQL query for re-execution and minimal result info
-        raw_results = state.get("query_results", [])
-        query_result = state.get("query_result", "")
-        
-        # Create a minimal result summary for memory efficiency
-        if raw_results:
-            result_summary = f"Found {len(raw_results)} results"
-        else:
-            result_summary = query_result[:500] + "..." if len(query_result) > 500 else query_result
-        
+
+        # Store SPARQL query for re-execution
+        query_result = state.get("query_result", None)
+        result_summary = query_result
+        print(f"query_result_large: {state.get('query_result_large', None)}")
+        print(f"query_result_small: {state.get('query_result_small', None)}")        
         entry = MemoryEntry(
             timestamp=datetime.now().isoformat(),
             question=state.get("question", ""),
             sparql_query=state.get("sparql_query", ""),
-            query_result=result_summary,  # Store minimal summary to save memory
-            relevance="relevant" if not state.get("irrelevant_query", False) else "not_relevant",  # Backward compatibility
+            query_result=result_summary,
+            query_result_large=state.get("query_result_large", None),
+            query_result_small=state.get("query_result_small", None),
+            relevance="relevant" if not state.get("irrelevant_query", False) else "not_relevant",
             attempts=state.get("attempts", 0),
             sparql_error=state.get("sparql_error", False),
             irrelevant_query=state.get("irrelevant_query", False),
@@ -266,7 +265,7 @@ Rate the semantic similarity (0.0 to 1.0):"""
         
         for entry in recent_entries:
             if not entry.irrelevant_query:
-                summary_parts.append(f"User asked: '{entry.question}' - SPARQL: {entry.sparql_query[:500]}...")
+                summary_parts.append(f"User asked: '{entry.question}' - SPARQL: {entry.sparql_query}...")
             else:
                 summary_parts.append(f"User asked unrelated question: '{entry.question}'")
         
@@ -295,14 +294,9 @@ Rate the semantic similarity (0.0 to 1.0):"""
             context_parts.append("Recent successful queries:")
             for entry in successful_queries:
                 context_parts.append(f"- Q: {entry.question}")
-                context_parts.append(f"  SPARQL: {entry.sparql_query[:300]}...")
+                context_parts.append(f"  SPARQL: {entry.sparql_query}...")
         
         return "\n".join(context_parts)
-    
-
-    
-
-
     
     def clear_memory(self) -> None:
         """Clear all memory for the current session."""

@@ -134,8 +134,8 @@ async function sendMessage() {
     const message = messageInput.value.trim();
     if (!message || !isConnected) return;
 
-    // Add user message to chat
-    addMessage(message, "user");
+    // Add user message to chat (no data object for user messages)
+    addMessage(message, "user", null);
 
     // Clear input
     messageInput.value = "";
@@ -158,8 +158,8 @@ async function sendMessage() {
         const data = await response.json();
 
         if (response.ok) {
-            // Add bot response
-            addMessage(data.response, "bot");
+            // Add bot response with the complete data object
+            addMessage(null, "bot", data);
 
             // Store SPARQL query for sidebar
             if (data.sparql_query) {
@@ -167,12 +167,12 @@ async function sendMessage() {
                 showSparqlQuery(data.sparql_query);
             }
 
-            // Show memory info
+            // Show memory info with enhanced details
             if (data.memory_info) {
-                showToast(
-                    `Conversation ${data.memory_info.conversation_count}`,
-                    "info"
-                );
+                const memoryMessage = data.cached_response 
+                    ? `Cached response (${Math.round(data.cache_similarity * 100)}% match)`
+                    : `Conversation ${data.memory_info.conversation_count}`;
+                showToast(memoryMessage, "info");
             }
         } else {
             addMessage(`Error: ${data.error}`, "bot");
@@ -190,7 +190,78 @@ async function sendMessage() {
     }
 }
 
-function addMessage(text, sender) {
+function createMessageContent(data, sender) {
+    // For user messages, just return the text
+    if (sender === "user") {
+        return data;
+    }
+
+    console.log("Creating message content for bot:", data);
+
+    // For bot messages, handle different response types
+    const container = document.createElement("div");
+
+    // Add cache indicator if response was cached
+    if (data.cached_response) {
+        const cacheInfo = document.createElement("div");
+        cacheInfo.className = "message-cached";
+        cacheInfo.textContent = `Cached Response (${Math.round(data.cache_similarity * 100)}% match)`;
+        container.appendChild(cacheInfo);
+    }
+
+    // Handle large response (table format)
+    if (data.response_large) {
+        const tableInfo = document.createElement("div");
+        tableInfo.className = "table-info";
+        tableInfo.textContent = `Showing ${data.response_large.length} results:`;
+        container.appendChild(tableInfo);
+
+        const tableContainer = document.createElement("div");
+        tableContainer.className = "table-container";
+
+        const table = document.createElement("table");
+        table.className = "message-table";
+
+        // Create header
+        if (data.response_large.length > 0) {
+            const thead = document.createElement("thead");
+            const headerRow = document.createElement("tr");
+            Object.keys(data.response_large[0]).forEach(key => {
+                const th = document.createElement("th");
+                th.textContent = key;
+                headerRow.appendChild(th);
+            });
+            thead.appendChild(headerRow);
+            table.appendChild(thead);
+
+            // Create body
+            const tbody = document.createElement("tbody");
+            data.response_large.forEach(row => {
+                const tr = document.createElement("tr");
+                Object.values(row).forEach(value => {
+                    const td = document.createElement("td");
+                    td.textContent = value;
+                    tr.appendChild(td);
+                });
+                tbody.appendChild(tr);
+            });
+            table.appendChild(tbody);
+        }
+
+        tableContainer.appendChild(table);
+        container.appendChild(tableContainer);
+    } 
+    // Handle small response (text format)
+    else if (data.response_small || data.response) {
+        const text = document.createElement("div");
+        text.textContent = data.response_small || data.response;
+        container.appendChild(text);
+    }
+
+    return container;
+}
+
+function addMessage(text, sender, data = null) {
     const messageDiv = document.createElement("div");
     messageDiv.className = `message ${sender}-message`;
 
@@ -201,15 +272,20 @@ function addMessage(text, sender) {
     icon.className = sender === "user" ? "fas fa-user" : "fas fa-robot";
     avatar.appendChild(icon);
 
-    const content = document.createElement("div");
-    content.className = "message-content";
+    const contentDiv = document.createElement("div");
+    contentDiv.className = "message-content";
 
     const messageText = document.createElement("div");
     messageText.className = "message-text";
 
-    // Check if the text contains a table (ASCII art table)
-    if (sender === "bot" && isTableResult(text)) {
-        messageText.innerHTML = formatTableResult(text);
+    if (sender === "bot" && data) {
+        // Create formatted content using the helper function
+        const formattedContent = createMessageContent(data, sender);
+        if (formattedContent instanceof HTMLElement) {
+            messageText.appendChild(formattedContent);
+        } else {
+            messageText.textContent = formattedContent;
+        }
     } else {
         messageText.textContent = text;
     }
@@ -218,113 +294,16 @@ function addMessage(text, sender) {
     timestamp.className = "message-timestamp";
     timestamp.textContent = new Date().toLocaleTimeString();
 
-    content.appendChild(messageText);
-    content.appendChild(timestamp);
+    contentDiv.appendChild(messageText);
+    contentDiv.appendChild(timestamp);
 
     messageDiv.appendChild(avatar);
-    messageDiv.appendChild(content);
+    messageDiv.appendChild(contentDiv);
 
     chatMessages.appendChild(messageDiv);
 
     // Scroll to bottom
     chatMessages.scrollTop = chatMessages.scrollHeight;
-}
-
-function isTableResult(text) {
-    // Check if text contains ASCII table patterns
-    const tablePatterns = [
-        /\|.*\|.*\|/, // Contains pipe-separated columns
-        /\+.*\+.*\+/, // Contains plus-separated borders
-        /-.*\|.*-/, // Contains dash-separated rows
-        /product_name/i, // Contains common table headers
-        /customer_name/i,
-        /order_id/i,
-        /price/i,
-        /quantity/i,
-    ];
-
-    return tablePatterns.some((pattern) => pattern.test(text));
-}
-
-function formatTableResult(text) {
-    // Split text into lines
-    const lines = text.split("\n").filter((line) => line.trim());
-
-    // Find the table content (between borders or with pipe separators)
-    const tableLines = lines.filter(
-        (line) =>
-            line.includes("|") ||
-            line.includes("+") ||
-            line.includes("-") ||
-            line.trim().startsWith("|") ||
-            line.trim().endsWith("|")
-    );
-
-    if (tableLines.length === 0) {
-        return text; // Return original text if no table found
-    }
-
-    // Extract headers and data
-    const headers = [];
-    const data = [];
-    let inTable = false;
-
-    for (const line of tableLines) {
-        const cleanLine = line.trim();
-
-        // Skip border lines (lines with only +, -, or |)
-        if (/^[+\-|]+$/.test(cleanLine.replace(/\s/g, ""))) {
-            continue;
-        }
-
-        // Extract columns from pipe-separated line
-        if (cleanLine.includes("|")) {
-            const columns = cleanLine
-                .split("|")
-                .map((col) => col.trim())
-                .filter((col) => col.length > 0);
-
-            if (columns.length > 0) {
-                if (headers.length === 0) {
-                    headers.push(...columns);
-                } else {
-                    data.push(columns);
-                }
-            }
-        }
-    }
-
-    // Create HTML table
-    if (headers.length > 0) {
-        let tableHTML =
-            '<div class="table-container"><table class="result-table">';
-
-        // Add header row
-        tableHTML += "<thead><tr>";
-        headers.forEach((header) => {
-            tableHTML += `<th>${header}</th>`;
-        });
-        tableHTML += "</tr></thead>";
-
-        // Add data rows
-        if (data.length > 0) {
-            tableHTML += "<tbody>";
-            data.forEach((row) => {
-                tableHTML += "<tr>";
-                row.forEach((cell) => {
-                    tableHTML += `<td>${cell}</td>`;
-                });
-                tableHTML += "</tr>";
-            });
-            tableHTML += "</tbody>";
-        }
-
-        tableHTML += "</table></div>";
-        return tableHTML;
-    }
-
-    // Fallback: return original text if table parsing fails
-    return text;
 }
 
 function showLoading(show) {

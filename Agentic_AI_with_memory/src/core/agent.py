@@ -146,20 +146,17 @@ Provide only the SPARQL query without any explanations. Use appropriate variable
         try:
             result = self.client.query(sparql_query, use_reasoning=True)
             print("Executed Result", result)
-            if result and 'results' in result:
-                bindings = result['results']['bindings']
+            if result and isinstance(result, dict):
+                # Store the complete SPARQL result including head and results
+                state["query_results"] = result
+                
+                # Extract bindings for result count
+                bindings = result.get('results', {}).get('bindings', [])
                 if bindings:
-                    state["query_results"] = bindings
-                    print(f"Raw SPARQL Query Result: {state['query_results']}")
-                    formatted_results = []
-                    for binding in bindings:
-                        result_dict = {var: value.get('value', str(value)) for var, value in binding.items()}
-                        formatted_results.append(result_dict)
-                    # formatted_result = str(formatted_results) if len(bindings) <= 5 else f"Showing first 5 of {len(bindings)} results:\n{formatted_results}"
-                    formatted_result = str(formatted_results)
+                    formatted_result = f"Found {len(bindings)} results."
                 else:
-                    state["query_results"] = []
                     formatted_result = "No results found."
+                    
                 state["query_result"] = formatted_result
                 state["sparql_error"] = False
                 print("SPARQL SELECT query executed successfully.")
@@ -205,7 +202,8 @@ Consider the conversation context when formulating responses. If this is a follo
             ])
         human_response = generate_prompt | self.llm | StrOutputParser()
         answer = human_response.invoke({"sparql": sparql, "result": result})
-        state["query_result"] = answer
+        state["query_result_small"] = answer
+        state["query_result"] = answer  # Keep for backward compatibility
         print("Generated human-readable answer.")
         return state
 
@@ -233,12 +231,13 @@ Consider the conversation context when formulating responses. If this is a follo
     def generate_irrelevant_response(self, state: AgentState) -> AgentState:
         """Generate a hardcoded response for irrelevant queries."""
         print("Query is not relevant to the knowledge graph schema.")
-        state["query_result"] = "I'm sorry, but I cannot process this query as it's not related to the knowledge graph data. Please ask questions about the available data in the knowledge graph, such as products, customers, orders, or inventory information."
+        state["query_result"] = "I'm sorry, but I cannot process this query as it's not related to the knowledge graph data. Please ask questions about the available data in the knowledge graph for products."
         print("Generated hardcoded irrelevant response.")
         return state
     
     def update_memory(self, state: AgentState) -> AgentState:
         """Update the agent's memory with the current interaction."""
+        print("Agent State : ", state)
         self.memory.add_memory_entry(state)
         print(f"Memory updated for session: {self.memory.session_id}")
         return state
