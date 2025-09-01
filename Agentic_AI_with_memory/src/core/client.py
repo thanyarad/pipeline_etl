@@ -105,6 +105,6 @@ class StardogClient:
                 range_obj = rel_info.get('range')
                 relationships[relationship] = {'domain': domain, 'range': range_obj}
             schema_dict = {'classes': classes_with_properties, 'relation': relationships}
-            schema_str = str(schema_dict).replace("{", "{{").replace("}", "}}")
+            schema_str = str(schema_dict)
             return schema_str
         return None

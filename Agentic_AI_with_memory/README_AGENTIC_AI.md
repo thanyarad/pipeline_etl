@@ -182,8 +182,7 @@ RESPONSE_LENGTH_LIMIT=200
 
 #### **OpenAI Models**
 
--   **Primary Model**: `gpt-3.5-turbo` (default)
--   **Alternative Models**: `gpt-4`, `gpt-4-turbo`, `gpt-3.5-turbo-16k`
+-   **Primary Model**: `o4-mini` (default)
 -   **Configuration**: Set via `OPENAI_MODEL` environment variable
 
 #### **Google AI Models** (Currently Commented Out)

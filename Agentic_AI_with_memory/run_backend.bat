@@ -2,17 +2,24 @@
 echo Starting Knowledge Graph Chatbot Backend...
 echo.
 
-REM Check if Python is available
-python --version >nul 2>&1
-if errorlevel 1 (
-    echo Error: Python is not installed or not in PATH
-    pause
-    exit /b 1
+REM Check if virtual environment exists, if not create one
+if not exist ".venv\Scripts\activate.bat" (
+    echo Virtual environment not found. Creating one...
+    python -m venv .venv
+    if errorlevel 1 (
+        echo Error: Failed to create virtual environment. Please check Python installation.
+        pause
+        exit /b 1
+    )
 )
+
+REM Activate virtual environment
+call .venv\Scripts\activate.bat
 
 REM Install requirements if needed
 echo Installing requirements...
-pip install -r requirements.txt
+python -m pip install --upgrade pip >nul
+python -m pip install -r requirements.txt
 
 REM Start the backend server
 echo.

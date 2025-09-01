@@ -88,6 +88,14 @@ class StardogAgent:
         conversation_context = self.memory.get_conversation_context()
         print(f"Converting question to SPARQL: {question}")
         
+        # Escape curly braces in schema to prevent template variable interpretation
+        if schema:
+            schema = schema.replace("{", "{{").replace("}", "}}")
+        
+        # Escape curly braces in conversation context as well
+        if conversation_context:
+            conversation_context = conversation_context.replace("{", "{{").replace("}", "}}")
+        
         system = """You are an assistant that converts natural language questions into SPARQL queries based on the following knowledge graph schema:
 
 {schema}
@@ -173,10 +181,15 @@ Provide only the SPARQL query without any explanations. Use appropriate variable
     def generate_human_readable_answer(self, state: AgentState) -> AgentState:
         sparql = state["sparql_query"].replace("{", "{{").replace("}", "}}")
         result = str(state["query_result"]).replace("{", "{{").replace("}", "}}")
+        print("Result:",result)
         query_results = state.get("query_results", [])
         sparql_error = state.get("sparql_error", False)
         conversation_context = self.memory.get_conversation_context()
         print("Generating a human-readable answer.")
+        
+        # Escape curly braces in conversation context to prevent template variable interpretation
+        if conversation_context:
+            conversation_context = conversation_context.replace("{", "{{").replace("}", "}}")
         
         system = """You are an assistant that converts SPARQL query results into clear, natural language responses for the knowledge graph system.
 
@@ -188,17 +201,17 @@ Consider the conversation context when formulating responses. If this is a follo
         if sparql_error:
             generate_prompt = ChatPromptTemplate.from_messages([
                 ("system", system),
-                ("human", f"""SPARQL Query:\n{{sparql}}\n\nResult:\n\n{{result}}\n\nFormulate a clear and understandable error message informing about the issue."""),
+                ("human", "SPARQL Query:\n{sparql}\n\nResult:\n\n{result}\n\nFormulate a clear and understandable error message informing about the issue."),
             ])
         elif not query_results:
             generate_prompt = ChatPromptTemplate.from_messages([
                 ("system", system),
-                ("human", f"""SPARQL Query:\n{{sparql}}\n\nResult:\n\n{{result}}\n\nFormulate a clear and understandable answer to the original question and mention that no results were found for their query."""),
+                ("human", "SPARQL Query:\n{sparql}\n\nResult:\n\n{result}\n\nFormulate a clear and understandable answer to the original question and mention that no results were found for their query."),
             ])
         else:
             generate_prompt = ChatPromptTemplate.from_messages([
                 ("system", system),
-                ("human", f"""SPARQL Query:\n{{sparql}}\n\nResult:\n\n{{result}}\n\nFormulate a clear and understandable answer to the original question and present the information in a natural way. For purchases, mention product names and relevant details like prices or quantities."""),
+                ("human", "SPARQL Query:\n{sparql}\n\nResult:\n\n{result}\n\nFormulate a clear and understandable answer to the original question and present the information in a natural way. For purchases, mention product names and relevant details like prices or quantities."),
             ])
         human_response = generate_prompt | self.llm | StrOutputParser()
         answer = human_response.invoke({"sparql": sparql, "result": result})
@@ -237,7 +250,6 @@ Consider the conversation context when formulating responses. If this is a follo
     
     def update_memory(self, state: AgentState) -> AgentState:
         """Update the agent's memory with the current interaction."""
-        print("Agent State : ", state)
         self.memory.add_memory_entry(state)
         print(f"Memory updated for session: {self.memory.session_id}")
         return state

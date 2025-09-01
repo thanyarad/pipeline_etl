@@ -79,47 +79,60 @@ class SessionMemory:
         """
         return self._cached_schema is not None and self._schema_formatted
     
-    def _check_semantic_similarity(self, question1: str, question2: str) -> float:
+
+    
+
+    
+    def _find_best_match_single_call(self, question: str, valid_entries: list, similarity_threshold: float) -> Optional[Dict[str, Any]]:
         """
-        Use LLM to check semantic similarity between two questions.
+        Find the best matching cached question using a single LLM call.
         
         Args:
-            question1: First question
-            question2: Second question
+            question: The current question to check
+            valid_entries: List of valid memory entries to compare against
+            similarity_threshold: Minimum similarity score to consider as match
             
         Returns:
-            Similarity score between 0.0 and 1.0
+            Best match dictionary if found, None otherwise
         """
         if not self.llm:
-            # Fallback to simple similarity if no LLM available
-            return self._simple_similarity(question1, question2)
+            print("No LLM available for cache matching.")
+            return None
         
         try:
+            # Prepare the list of cached questions for comparison
+            cached_questions = []
+            for i, entry in enumerate(valid_entries):
+                cached_questions.append(f"{i+1}. {entry.question}")
+            
+            cached_questions_text = "\n".join(cached_questions)
+            
             system_prompt = """You are an expert at determining semantic similarity between questions. 
-            Analyze if two questions are asking for the same information, even if they use different words or phrasing.
+            Analyze if the current question is asking for the EXACT SAME information as any of the cached questions.
+            
+            IMPORTANT: Only match questions that are asking for the same specific entities or data, not just similar patterns.
             
             Consider:
-            - Are they asking about the same entities, relationships, or data?
-            - Do they have the same intent and expected outcome?
-            - Are they requesting similar information from a knowledge graph?
+            - Are they asking about the same specific entities (same names, IDs, categories)?
+            - Do they have the same intent AND the same target data?
+            - Would the same SPARQL query work for both questions?
             
-            Respond with only a number between 0.0 and 1.0, where:
-            - 1.0 = Exactly the same question (same meaning, same intent)
-            - 0.8-0.9 = Very similar questions (same intent, slightly different phrasing)
-            - 0.6-0.7 = Similar questions (related intent, different approach)
-            - 0.4-0.5 = Somewhat related questions
-            - 0.0-0.3 = Different questions (different intent or topic)
+            If you find a match that would use the same SPARQL query, respond with ONLY the number of the best matching question (e.g., "3").
+            If no question matches with sufficient similarity, respond with "NONE".
             
             Examples:
-            "Show me all products" vs "What products do you have" = 0.9
-            "List customers" vs "Who are the users" = 0.8
-            "Products under $100" vs "Show expensive items" = 0.3
+            - "Show me all products" vs "What products do you have" = Match (same query)
+            - "Describe category Baseball Uniforms" vs "Describe category Suits" = No match (different categories)
+            - "List customers" vs "Who are the users" = Match (same query)
+            - "Products under $100" vs "Show expensive items" = No match (different criteria)
             """
             
-            human_prompt = f"""Question 1: {question1}
-Question 2: {question2}
+            human_prompt = f"""Current Question: {question}
 
-Rate the semantic similarity (0.0 to 1.0):"""
+Cached Questions:
+{cached_questions_text}
+
+Which cached question (if any) is semantically similar to the current question? Respond with only the number or "NONE":"""
             
             prompt = ChatPromptTemplate.from_messages([
                 ("system", system_prompt),
@@ -127,61 +140,43 @@ Rate the semantic similarity (0.0 to 1.0):"""
             ])
             
             chain = prompt | self.llm | StrOutputParser()
-            response = chain.invoke({})
+            response = chain.invoke({}).strip()
             
-            # Extract numeric value from response
+            print(f"LLM response for cache matching: {response}")
+            
+            # Parse the response
+            if response.upper() == "NONE":
+                return None
+            
+            # Extract number from response
             import re
-            match = re.search(r'0\.\d+|1\.0', response.strip())
+            match = re.search(r'\d+', response)
             if match:
-                return float(match.group())
-            else:
-                # Fallback if parsing fails
-                return self._simple_similarity(question1, question2)
+                index = int(match.group()) - 1  # Convert to 0-based index
+                if 0 <= index < len(valid_entries):
+                    selected_entry = valid_entries[index]
+                    # Calculate a high similarity score since LLM confirmed it's a match
+                    similarity_score = 0.9  # High confidence since LLM selected it
+                    
+                    return {
+                        "cached_question": selected_entry.question,
+                        "cached_result": selected_entry.query_result,
+                        "cached_sparql": selected_entry.sparql_query,
+                        "similarity_score": similarity_score,
+                        "timestamp": selected_entry.timestamp
+                    }
+            
+            return None
                 
         except Exception as e:
-            print(f"Error in LLM similarity check: {e}")
-            # Fallback to simple similarity
-            return self._simple_similarity(question1, question2)
+            print(f"Error in LLM cache matching: {e}")
+            return None
     
-    def _simple_similarity(self, question1: str, question2: str) -> float:
-        """
-        Fallback simple similarity method using Jaccard similarity.
+
         
-        Args:
-            question1: First question
-            question2: Second question
-            
-        Returns:
-            Similarity score between 0.0 and 1.0
-        """
-        question1_lower = question1.lower().strip()
-        question2_lower = question2.lower().strip()
-        
-        # Exact match
-        if question1_lower == question2_lower:
-            return 1.0
-        
-        question1_words = set(question1_lower.split())
-        question2_words = set(question2_lower.split())
-        
-        if len(question1_words) == 0 or len(question2_words) == 0:
-            return 0.0
-        
-        # Jaccard similarity
-        intersection = len(question1_words.intersection(question2_words))
-        union = len(question1_words.union(question2_words))
-        similarity = intersection / union if union > 0 else 0
-        
-        # Bonus for length similarity
-        length_diff = abs(len(question1_words) - len(question2_words))
-        length_similarity = 1.0 / (1.0 + length_diff)
-        similarity = (similarity + length_similarity) / 2
-        
-        return similarity
-    
     def check_query_cache(self, question: str, similarity_threshold: float = 0.8) -> Optional[Dict[str, Any]]:
         """
-        Check if a similar question was asked before and return cached result using LLM-based similarity.
+        Check if a similar question was asked before and return cached result using a single LLM call.
         
         Args:
             question: The current question to check
@@ -193,29 +188,19 @@ Rate the semantic similarity (0.0 to 1.0):"""
         if len(self.conversation_history) == 0:
             return None
         
-        best_match = None
-        best_score = 0
+        # Filter out irrelevant queries and errors
+        valid_entries = [
+            entry for entry in self.conversation_history 
+            if not entry.irrelevant_query and not entry.sparql_error
+        ]
+        
+        if not valid_entries:
+            return None
         
         print(f"Checking cache for question: {question}")
         
-        for entry in self.conversation_history:
-            if entry.irrelevant_query or entry.sparql_error:
-                continue
-            
-            # Use LLM-based semantic similarity
-            similarity = self._check_semantic_similarity(question, entry.question)
-            
-            print(f"Similarity with '{entry.question}': {similarity:.2f}")
-            
-            if similarity > best_score and similarity >= similarity_threshold:
-                best_score = similarity
-                best_match = {
-                    "cached_question": entry.question,
-                    "cached_result": entry.query_result,
-                    "cached_sparql": entry.sparql_query,
-                    "similarity_score": similarity,
-                    "timestamp": entry.timestamp
-                }
+        # Use single LLM call to find the best match
+        best_match = self._find_best_match_single_call(question, valid_entries[-5:], similarity_threshold)
         
         if best_match:
             print(f"Query cache hit! Similarity: {best_match['similarity_score']:.2f}")
@@ -235,9 +220,7 @@ Rate the semantic similarity (0.0 to 1.0):"""
 
         # Store SPARQL query for re-execution
         query_result = state.get("query_result", None)
-        result_summary = query_result
-        print(f"query_result_large: {state.get('query_result_large', None)}")
-        print(f"query_result_small: {state.get('query_result_small', None)}")        
+        result_summary = query_result     
         entry = MemoryEntry(
             timestamp=datetime.now().isoformat(),
             question=state.get("question", ""),
@@ -260,7 +243,7 @@ Rate the semantic similarity (0.0 to 1.0):"""
         if len(self.conversation_history) == 0:
             return
             
-        recent_entries = list(self.conversation_history)[-3:]  # Last 3 entries
+        recent_entries = list(self.conversation_history)[-5:]  # Last 5 entries
         summary_parts = []
         
         for entry in recent_entries:
@@ -283,18 +266,6 @@ Rate the semantic similarity (0.0 to 1.0):"""
         
         context_parts = [f"Session ID: {self.session_id}"]
         context_parts.append(f"Previous conversation context: {self.context_summary}")
-        
-        # Add recent successful queries for reference (only questions and SPARQL, no results)
-        successful_queries = [
-            entry for entry in self.conversation_history 
-            if not entry.irrelevant_query and not entry.sparql_error
-        ][-2:]  # Last 2 successful queries
-        
-        if successful_queries:
-            context_parts.append("Recent successful queries:")
-            for entry in successful_queries:
-                context_parts.append(f"- Q: {entry.question}")
-                context_parts.append(f"  SPARQL: {entry.sparql_query}...")
         
         return "\n".join(context_parts)
     

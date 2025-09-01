@@ -5,21 +5,15 @@ const API_BASE_URL = "http://localhost:5000/api";
 const chatMessages = document.getElementById("chatMessages");
 const messageInput = document.getElementById("messageInput");
 const sendButton = document.getElementById("sendButton");
-const charCount = document.getElementById("charCount");
 const statusIndicator = document.getElementById("statusIndicator");
 const statusText = document.getElementById("statusText");
 const loadingOverlay = document.getElementById("loadingOverlay");
-const sidebar = document.getElementById("sidebar");
-const sparqlQuery = document.getElementById("sparqlQuery");
-const closeSidebar = document.getElementById("closeSidebar");
-const copyQueryBtn = document.getElementById("copyQueryBtn");
 const clearMemoryBtn = document.getElementById("clearMemoryBtn");
 const refreshSchemaBtn = document.getElementById("refreshSchemaBtn");
 const toastContainer = document.getElementById("toastContainer");
 
 // State
 let isConnected = false;
-let currentSparqlQuery = "";
 
 // Initialize the application
 document.addEventListener("DOMContentLoaded", function () {
@@ -34,9 +28,6 @@ function initializeApp() {
 
     // Set up auto-resize for textarea
     setupTextareaAutoResize();
-
-    // Set up character count
-    updateCharCount();
 }
 
 function setupEventListeners() {
@@ -51,13 +42,8 @@ function setupEventListeners() {
 
     // Input events
     messageInput.addEventListener("input", function () {
-        updateCharCount();
         updateSendButton();
     });
-
-    // Sidebar events
-    closeSidebar.addEventListener("click", closeSidebarPanel);
-    copyQueryBtn.addEventListener("click", copySparqlQuery);
 
     // Action buttons
     clearMemoryBtn.addEventListener("click", clearMemory);
@@ -69,19 +55,6 @@ function setupTextareaAutoResize() {
         this.style.height = "auto";
         this.style.height = Math.min(this.scrollHeight, 120) + "px";
     });
-}
-
-function updateCharCount() {
-    const count = messageInput.value.length;
-    charCount.textContent = `${count}/1000`;
-
-    if (count > 900) {
-        charCount.style.color = "#e74c3c";
-    } else if (count > 800) {
-        charCount.style.color = "#f39c12";
-    } else {
-        charCount.style.color = "#6c757d";
-    }
 }
 
 function updateSendButton() {
@@ -140,7 +113,6 @@ async function sendMessage() {
     // Clear input
     messageInput.value = "";
     messageInput.style.height = "auto";
-    updateCharCount();
     updateSendButton();
 
     // Show loading
@@ -161,16 +133,12 @@ async function sendMessage() {
             // Add bot response with the complete data object
             addMessage(null, "bot", data);
 
-            // Store SPARQL query for sidebar
-            if (data.sparql_query) {
-                currentSparqlQuery = data.sparql_query;
-                showSparqlQuery(data.sparql_query);
-            }
-
             // Show memory info with enhanced details
             if (data.memory_info) {
-                const memoryMessage = data.cached_response 
-                    ? `Cached response (${Math.round(data.cache_similarity * 100)}% match)`
+                const memoryMessage = data.cached_response
+                    ? `Cached response (${Math.round(
+                          data.cache_similarity * 100
+                      )}% match)`
                     : `Conversation ${data.memory_info.conversation_count}`;
                 showToast(memoryMessage, "info");
             }
@@ -205,7 +173,9 @@ function createMessageContent(data, sender) {
     if (data.cached_response) {
         const cacheInfo = document.createElement("div");
         cacheInfo.className = "message-cached";
-        cacheInfo.textContent = `Cached Response (${Math.round(data.cache_similarity * 100)}% match)`;
+        cacheInfo.textContent = `Cached Response (${Math.round(
+            data.cache_similarity * 100
+        )}% match)`;
         container.appendChild(cacheInfo);
     }
 
@@ -226,7 +196,15 @@ function createMessageContent(data, sender) {
         if (data.response_large.length > 0) {
             const thead = document.createElement("thead");
             const headerRow = document.createElement("tr");
-            Object.keys(data.response_large[0]).forEach(key => {
+
+            // Collect all unique keys from all rows
+            const allKeys = new Set();
+            data.response_large.forEach((row) => {
+                Object.keys(row).forEach((key) => allKeys.add(key));
+            });
+
+            // Convert Set to Array and create headers
+            Array.from(allKeys).forEach((key) => {
                 const th = document.createElement("th");
                 th.textContent = key;
                 headerRow.appendChild(th);
@@ -236,11 +214,11 @@ function createMessageContent(data, sender) {
 
             // Create body
             const tbody = document.createElement("tbody");
-            data.response_large.forEach(row => {
+            data.response_large.forEach((row) => {
                 const tr = document.createElement("tr");
-                Object.values(row).forEach(value => {
+                Array.from(allKeys).forEach((key) => {
                     const td = document.createElement("td");
-                    td.textContent = value;
+                    td.textContent = row[key] || ""; // Use empty string if value is null/undefined
                     tr.appendChild(td);
                 });
                 tbody.appendChild(tr);
@@ -250,7 +228,7 @@ function createMessageContent(data, sender) {
 
         tableContainer.appendChild(table);
         container.appendChild(tableContainer);
-    } 
+    }
     // Handle small response (text format)
     else if (data.response_small || data.response) {
         const text = document.createElement("div");
@@ -311,25 +289,6 @@ function showLoading(show) {
         loadingOverlay.classList.add("show");
     } else {
         loadingOverlay.classList.remove("show");
-    }
-}
-
-function showSparqlQuery(query) {
-    sparqlQuery.textContent = query;
-    sidebar.classList.add("open");
-}
-
-function closeSidebarPanel() {
-    sidebar.classList.remove("open");
-}
-
-async function copySparqlQuery() {
-    try {
-        await navigator.clipboard.writeText(currentSparqlQuery);
-        showToast("SPARQL query copied to clipboard", "success");
-    } catch (error) {
-        console.error("Failed to copy query:", error);
-        showToast("Failed to copy query", "error");
     }
 }
 

@@ -15,9 +15,6 @@ tabulate
 # Utilities
 typing-extensions
 
-# Web Interface
-streamlit>=1.28.0
-
 # Backend API
 flask>=2.3.0
 flask-cors>=4.0.0

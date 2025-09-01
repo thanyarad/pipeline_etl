@@ -1,4 +1,10 @@
-from flask import Flask, request, jsonify
+#!/usr/bin/env python3
+"""
+Development server that serves both the Flask API and static frontend files.
+This is useful for development and testing.
+"""
+
+from flask import Flask, send_from_directory, request, jsonify
 from flask_cors import CORS
 import sys
 import os
@@ -20,6 +26,9 @@ CORS(app)  # Enable CORS for all routes
 stardog_client = None
 agent = None
 workflow = None
+
+# Get absolute path to the frontend directory
+FRONTEND_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'frontend')
 
 def initialize_agent():
     """Initialize the Stardog agent and workflow"""
@@ -45,6 +54,19 @@ def initialize_agent():
     except Exception as e:
         print(f"Error initializing agent: {e}")
         return False
+
+# Serve frontend files
+@app.route('/')
+def serve_frontend():
+    return send_from_directory(FRONTEND_DIR, 'index.html')
+
+@app.route('/<path:path>')
+def serve_static(path):
+    try:
+        return send_from_directory(FRONTEND_DIR, path)
+    except Exception as e:
+        print(f"Error serving static file {path}: {e}")
+        return f"File not found: {path}", 404
 
 @app.route('/api/health', methods=['GET'])
 def health_check():
@@ -83,7 +105,9 @@ def chat():
             'timestamp': datetime.now().isoformat(),
             'memory_info': {
                 'session_id': memory_info.get('session_id'),
-                'conversation_count': memory_info.get('conversation_count', 0)
+                'conversation_count': memory_info.get('conversation_count', 0),
+                'schema_cached': memory_info.get('schema_cached', False),
+                'context_summary': agent.memory.context_summary
             }
         }
         
