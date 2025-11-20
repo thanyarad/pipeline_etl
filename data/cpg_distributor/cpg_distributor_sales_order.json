@@ -1,92 +1,83 @@
 [
     {
-        "purchase_id": 1,
+        "sales_order_id": 1,
         "distributor_id": 1,
         "order_date": "2024-11-09",
         "expected_delivery_date": "2024-11-25",
-        "order_status": "Delivered",
-        "currency": "USD",
-        "total_amount": 1975.0
+        "order_total_amount": 1975.0,
+        "currency": "USD"
     },
     {
-        "purchase_id": 2,
+        "sales_order_id": 2,
         "distributor_id": 2,
         "order_date": "2024-10-15",
         "expected_delivery_date": "2024-11-01",
-        "order_status": "Delivered",
-        "currency": "USD",
-        "total_amount": 2205.0
+        "order_total_amount": 2205.0,
+        "currency": "USD"
     },
     {
-        "purchase_id": 3,
+        "sales_order_id": 3,
         "distributor_id": 3,
         "order_date": "2024-11-03",
         "expected_delivery_date": "2024-11-20",
-        "order_status": "Pending",
-        "currency": "USD",
-        "total_amount": 2011.0
+        "order_total_amount": 2011.0,
+        "currency": "USD"
     },
     {
-        "purchase_id": 4,
+        "sales_order_id": 4,
         "distributor_id": 3,
         "order_date": "2024-12-07",
         "expected_delivery_date": "2024-12-18",
-        "order_status": "Delivered",
-        "currency": "USD",
-        "total_amount": 2445.0
+        "order_total_amount": 2445.0,
+        "currency": "USD"
     },
     {
-        "purchase_id": 5,
+        "sales_order_id": 5,
         "distributor_id": 1,
         "order_date": "2024-09-28",
         "expected_delivery_date": "2024-10-15",
-        "order_status": "Cancelled",
-        "currency": "USD",
-        "total_amount": 2070.0
+        "order_total_amount": 2070.0,
+        "currency": "USD"
     },
     {
-        "purchase_id": 6,
+        "sales_order_id": 6,
         "distributor_id": 2,
         "order_date": "2024-10-07",
         "expected_delivery_date": "2024-10-25",
-        "order_status": "Pending",
-        "currency": "USD",
-        "total_amount": 1896.5
+        "order_total_amount": 1896.5,
+        "currency": "USD"
     },
     {
-        "purchase_id": 7,
+        "sales_order_id": 7,
         "distributor_id": 2,
         "order_date": "2024-12-19",
         "expected_delivery_date": "2025-01-05",
-        "order_status": "Delivered",
-        "currency": "USD",
-        "total_amount": 1680.0
+        "order_total_amount": 1680.0,
+        "currency": "USD"
     },
     {
-        "purchase_id": 8,
+        "sales_order_id": 8,
         "distributor_id": 3,
         "order_date": "2024-11-05",
         "expected_delivery_date": "2024-11-22",
-        "order_status": "Cancelled",
-        "currency": "USD",
-        "total_amount": 1485.0
+        "order_total_amount": 1485.0,
+        "currency": "USD"
     },
     {
-        "purchase_id": 9,
+        "sales_order_id": 9,
         "distributor_id": 1,
         "order_date": "2024-11-25",
         "expected_delivery_date": "2024-12-10",
-        "order_status": "Pending",
-        "currency": "USD",
-        "total_amount": 1575.0
+        "order_total_amount": 1575.0,
+        "currency": "USD"
     },
     {
-        "purchase_id": 10,
+        "sales_order_id": 10,
         "distributor_id": 2,
         "order_date": "2024-08-29",
         "expected_delivery_date": "2024-09-15",
-        "order_status": "Cancelled",
-        "currency": "USD",
-        "total_amount": 1422.8
+        "order_total_amount": 1422.8,
+        "currency": "USD"
     }
 ]
+

@@ -1,52 +1,42 @@
 [
     {
         "invoice_id": 1,
-        "purchase_id": 1,
         "invoice_date": "2024-11-26",
-        "amount_due": 1975.0,
+        "invoice_total_amount": 1975.0,
+        "currency": "USD",
         "tax_amount": 158.0,
-        "discount": 50.0,
-        "total_payable": 2083.0,
-        "payment_status": "Paid"
+        "invoice_type": "Standard"
     },
     {
         "invoice_id": 2,
-        "purchase_id": 2,
         "invoice_date": "2024-11-02",
-        "amount_due": 2205.0,
+        "invoice_total_amount": 2205.0,
+        "currency": "USD",
         "tax_amount": 176.4,
-        "discount": 75.0,
-        "total_payable": 2306.4,
-        "payment_status": "Paid"
+        "invoice_type": "Standard"
     },
     {
         "invoice_id": 3,
-        "purchase_id": 4,
         "invoice_date": "2024-12-19",
-        "amount_due": 2445.0,
+        "invoice_total_amount": 2445.0,
+        "currency": "USD",
         "tax_amount": 195.6,
-        "discount": 100.0,
-        "total_payable": 2540.6,
-        "payment_status": "Overdue"
+        "invoice_type": "Standard"
     },
     {
         "invoice_id": 4,
-        "purchase_id": 7,
         "invoice_date": "2025-01-06",
-        "amount_due": 1680.0,
+        "invoice_total_amount": 1680.0,
+        "currency": "USD",
         "tax_amount": 134.4,
-        "discount": 25.0,
-        "total_payable": 1789.4,
-        "payment_status": "Unpaid"
+        "invoice_type": "Standard"
     },
     {
         "invoice_id": 5,
-        "purchase_id": 6,
         "invoice_date": "2024-10-26",
-        "amount_due": 1896.5,
+        "invoice_total_amount": 1896.5,
+        "currency": "USD",
         "tax_amount": 151.72,
-        "discount": 60.0,
-        "total_payable": 1988.22,
-        "payment_status": "Pending"
+        "invoice_type": "Standard"
     }
 ]
