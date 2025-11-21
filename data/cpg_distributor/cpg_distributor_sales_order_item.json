@@ -6,7 +6,8 @@
         "order_quantity": 500,
         "order_quantity_uom": "units",
         "unit_price": 1.89,
-        "item_total_amount": 945.0
+        "item_total_amount": 945.0,
+        "operation": "insert"
     },
     {
         "sales_order_id": 1,
@@ -15,7 +16,8 @@
         "order_quantity": 1000,
         "order_quantity_uom": "units",
         "unit_price": 2.19,
-        "item_total_amount": 2190.0
+        "item_total_amount": 2190.0,
+        "operation": "insert"
     },
     {
         "sales_order_id": 2,
@@ -24,7 +26,8 @@
         "order_quantity": 300,
         "order_quantity_uom": "units",
         "unit_price": 6.79,
-        "item_total_amount": 2037.0
+        "item_total_amount": 2037.0,
+        "operation": "insert"
     },
     {
         "sales_order_id": 2,
@@ -33,7 +36,8 @@
         "order_quantity": 200,
         "order_quantity_uom": "units",
         "unit_price": 6.99,
-        "item_total_amount": 1398.0
+        "item_total_amount": 1398.0,
+        "operation": "insert"
     },
     {
         "sales_order_id": 3,
@@ -42,7 +46,8 @@
         "order_quantity": 150,
         "order_quantity_uom": "units",
         "unit_price": 11.49,
-        "item_total_amount": 1723.5
+        "item_total_amount": 1723.5,
+        "operation": "insert"
     },
     {
         "sales_order_id": 3,
@@ -51,7 +56,8 @@
         "order_quantity": 250,
         "order_quantity_uom": "units",
         "unit_price": 4.99,
-        "item_total_amount": 1247.5
+        "item_total_amount": 1247.5,
+        "operation": "insert"
     },
     {
         "sales_order_id": 4,
@@ -60,7 +66,8 @@
         "order_quantity": 400,
         "order_quantity_uom": "units",
         "unit_price": 5.49,
-        "item_total_amount": 2196.0
+        "item_total_amount": 2196.0,
+        "operation": "insert"
     },
     {
         "sales_order_id": 4,
@@ -69,7 +76,8 @@
         "order_quantity": 300,
         "order_quantity_uom": "units",
         "unit_price": 4.79,
-        "item_total_amount": 1437.0
+        "item_total_amount": 1437.0,
+        "operation": "insert"
     },
     {
         "sales_order_id": 5,
@@ -78,7 +86,8 @@
         "order_quantity": 600,
         "order_quantity_uom": "units",
         "unit_price": 2.59,
-        "item_total_amount": 1554.0
+        "item_total_amount": 1554.0,
+        "operation": "insert"
     },
     {
         "sales_order_id": 5,
@@ -87,7 +96,8 @@
         "order_quantity": 800,
         "order_quantity_uom": "units",
         "unit_price": 2.19,
-        "item_total_amount": 1752.0
+        "item_total_amount": 1752.0,
+        "operation": "insert"
     },
     {
         "sales_order_id": 6,
@@ -96,7 +106,8 @@
         "order_quantity": 200,
         "order_quantity_uom": "units",
         "unit_price": 6.49,
-        "item_total_amount": 1298.0
+        "item_total_amount": 1298.0,
+        "operation": "insert"
     },
     {
         "sales_order_id": 6,
@@ -105,7 +116,8 @@
         "order_quantity": 350,
         "order_quantity_uom": "units",
         "unit_price": 4.49,
-        "item_total_amount": 1571.5
+        "item_total_amount": 1571.5,
+        "operation": "insert"
     },
     {
         "sales_order_id": 7,
@@ -114,7 +126,8 @@
         "order_quantity": 750,
         "order_quantity_uom": "units",
         "unit_price": 1.89,
-        "item_total_amount": 1417.5
+        "item_total_amount": 1417.5,
+        "operation": "insert"
     },
     {
         "sales_order_id": 7,
@@ -123,7 +136,8 @@
         "order_quantity": 450,
         "order_quantity_uom": "units",
         "unit_price": 2.59,
-        "item_total_amount": 1165.5
+        "item_total_amount": 1165.5,
+        "operation": "insert"
     },
     {
         "sales_order_id": 8,
@@ -132,7 +146,8 @@
         "order_quantity": 600,
         "order_quantity_uom": "units",
         "unit_price": 2.19,
-        "item_total_amount": 1314.0
+        "item_total_amount": 1314.0,
+        "operation": "insert"
     },
     {
         "sales_order_id": 8,
@@ -141,7 +156,8 @@
         "order_quantity": 500,
         "order_quantity_uom": "units",
         "unit_price": 2.19,
-        "item_total_amount": 1095.0
+        "item_total_amount": 1095.0,
+        "operation": "insert"
     },
     {
         "sales_order_id": 9,
@@ -150,7 +166,8 @@
         "order_quantity": 250,
         "order_quantity_uom": "units",
         "unit_price": 5.49,
-        "item_total_amount": 1372.5
+        "item_total_amount": 1372.5,
+        "operation": "insert"
     },
     {
         "sales_order_id": 9,
@@ -159,7 +176,8 @@
         "order_quantity": 150,
         "order_quantity_uom": "units",
         "unit_price": 6.49,
-        "item_total_amount": 973.5
+        "item_total_amount": 973.5,
+        "operation": "insert"
     },
     {
         "sales_order_id": 10,
@@ -168,7 +186,8 @@
         "order_quantity": 180,
         "order_quantity_uom": "units",
         "unit_price": 6.79,
-        "item_total_amount": 1222.2
+        "item_total_amount": 1222.2,
+        "operation": "insert"
     },
     {
         "sales_order_id": 10,
@@ -177,7 +196,7 @@
         "order_quantity": 220,
         "order_quantity_uom": "units",
         "unit_price": 4.49,
-        "item_total_amount": 987.8
+        "item_total_amount": 987.8,
+        "operation": "insert"
     }
 ]
-

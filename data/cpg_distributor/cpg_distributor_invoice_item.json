@@ -7,7 +7,8 @@
         "invoiced_quantity_uom": "units",
         "invoice_item_total_amount": 945.0,
         "sales_order_id": 1,
-        "sales_order_item_no": 1
+        "sales_order_item_no": 1,
+        "operation": "insert"
     },
     {
         "invoice_id": 1,
@@ -17,7 +18,8 @@
         "invoiced_quantity_uom": "units",
         "invoice_item_total_amount": 2190.0,
         "sales_order_id": 1,
-        "sales_order_item_no": 2
+        "sales_order_item_no": 2,
+        "operation": "insert"
     },
     {
         "invoice_id": 2,
@@ -27,7 +29,8 @@
         "invoiced_quantity_uom": "units",
         "invoice_item_total_amount": 2037.0,
         "sales_order_id": 2,
-        "sales_order_item_no": 1
+        "sales_order_item_no": 1,
+        "operation": "insert"
     },
     {
         "invoice_id": 2,
@@ -37,7 +40,8 @@
         "invoiced_quantity_uom": "units",
         "invoice_item_total_amount": 1398.0,
         "sales_order_id": 2,
-        "sales_order_item_no": 2
+        "sales_order_item_no": 2,
+        "operation": "insert"
     },
     {
         "invoice_id": 3,
@@ -47,7 +51,8 @@
         "invoiced_quantity_uom": "units",
         "invoice_item_total_amount": 2196.0,
         "sales_order_id": 4,
-        "sales_order_item_no": 1
+        "sales_order_item_no": 1,
+        "operation": "insert"
     },
     {
         "invoice_id": 3,
@@ -57,7 +62,8 @@
         "invoiced_quantity_uom": "units",
         "invoice_item_total_amount": 1437.0,
         "sales_order_id": 4,
-        "sales_order_item_no": 2
+        "sales_order_item_no": 2,
+        "operation": "insert"
     },
     {
         "invoice_id": 4,
@@ -67,7 +73,8 @@
         "invoiced_quantity_uom": "units",
         "invoice_item_total_amount": 1417.5,
         "sales_order_id": 7,
-        "sales_order_item_no": 1
+        "sales_order_item_no": 1,
+        "operation": "insert"
     },
     {
         "invoice_id": 4,
@@ -77,7 +84,8 @@
         "invoiced_quantity_uom": "units",
         "invoice_item_total_amount": 1165.5,
         "sales_order_id": 7,
-        "sales_order_item_no": 2
+        "sales_order_item_no": 2,
+        "operation": "insert"
     },
     {
         "invoice_id": 5,
@@ -87,7 +95,8 @@
         "invoiced_quantity_uom": "units",
         "invoice_item_total_amount": 1298.0,
         "sales_order_id": 6,
-        "sales_order_item_no": 1
+        "sales_order_item_no": 1,
+        "operation": "insert"
     },
     {
         "invoice_id": 5,
@@ -97,7 +106,7 @@
         "invoiced_quantity_uom": "units",
         "invoice_item_total_amount": 1571.5,
         "sales_order_id": 6,
-        "sales_order_item_no": 2
+        "sales_order_item_no": 2,
+        "operation": "insert"
     }
 ]
-

@@ -6,7 +6,8 @@
         "street_address": "2500 Distribution Center Drive",
         "postal_code": "60609",
         "city": "Chicago",
-        "country": "United States"
+        "country": "United States",
+        "operation": "insert"
     },
     {
         "distributor_id": 2,
@@ -15,7 +16,8 @@
         "street_address": "8800 Harbor Boulevard",
         "postal_code": "90001",
         "city": "Los Angeles",
-        "country": "United States"
+        "country": "United States",
+        "operation": "insert"
     },
     {
         "distributor_id": 3,
@@ -24,6 +26,7 @@
         "street_address": "1200 Commerce Parkway",
         "postal_code": "30309",
         "city": "Atlanta",
-        "country": "United States"
+        "country": "United States",
+        "operation": "insert"
     }
 ]

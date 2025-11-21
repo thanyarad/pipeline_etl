@@ -5,7 +5,8 @@
         "invoice_total_amount": 1975.0,
         "currency": "USD",
         "tax_amount": 158.0,
-        "invoice_type": "Standard"
+        "invoice_type": "Standard",
+        "operation": "insert"
     },
     {
         "invoice_id": 2,
@@ -13,7 +14,8 @@
         "invoice_total_amount": 2205.0,
         "currency": "USD",
         "tax_amount": 176.4,
-        "invoice_type": "Standard"
+        "invoice_type": "Standard",
+        "operation": "insert"
     },
     {
         "invoice_id": 3,
@@ -21,7 +23,8 @@
         "invoice_total_amount": 2445.0,
         "currency": "USD",
         "tax_amount": 195.6,
-        "invoice_type": "Standard"
+        "invoice_type": "Standard",
+        "operation": "insert"
     },
     {
         "invoice_id": 4,
@@ -29,7 +32,8 @@
         "invoice_total_amount": 1680.0,
         "currency": "USD",
         "tax_amount": 134.4,
-        "invoice_type": "Standard"
+        "invoice_type": "Standard",
+        "operation": "insert"
     },
     {
         "invoice_id": 5,
@@ -37,6 +41,7 @@
         "invoice_total_amount": 1896.5,
         "currency": "USD",
         "tax_amount": 151.72,
-        "invoice_type": "Standard"
+        "invoice_type": "Standard",
+        "operation": "insert"
     }
 ]

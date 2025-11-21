@@ -18,7 +18,8 @@
         "safety_stock_level": 2500,
         "inventory_status": "In Stock",
         "last_restock_date": "2024-12-15",
-        "last_updated": "2024-12-20 14:30:00"
+        "last_updated": "2024-12-20 14:30:00",
+        "operation": "insert"
     },
     {
         "inventory_id": 2,
@@ -39,7 +40,8 @@
         "safety_stock_level": 2000,
         "inventory_status": "In Stock",
         "last_restock_date": "2024-12-18",
-        "last_updated": "2024-12-20 16:45:00"
+        "last_updated": "2024-12-20 16:45:00",
+        "operation": "insert"
     },
     {
         "inventory_id": 3,
@@ -60,7 +62,8 @@
         "safety_stock_level": 1500,
         "inventory_status": "In Stock",
         "last_restock_date": "2024-12-10",
-        "last_updated": "2024-12-20 10:15:00"
+        "last_updated": "2024-12-20 10:15:00",
+        "operation": "insert"
     },
     {
         "inventory_id": 4,
@@ -81,7 +84,8 @@
         "safety_stock_level": 2500,
         "inventory_status": "In Stock",
         "last_restock_date": "2024-12-17",
-        "last_updated": "2024-12-20 13:20:00"
+        "last_updated": "2024-12-20 13:20:00",
+        "operation": "insert"
     },
     {
         "inventory_id": 5,
@@ -102,7 +106,8 @@
         "safety_stock_level": 1500,
         "inventory_status": "In Stock",
         "last_restock_date": "2024-12-14",
-        "last_updated": "2024-12-20 11:30:00"
+        "last_updated": "2024-12-20 11:30:00",
+        "operation": "insert"
     },
     {
         "inventory_id": 6,
@@ -123,7 +128,8 @@
         "safety_stock_level": 1000,
         "inventory_status": "Low Stock",
         "last_restock_date": "2024-12-05",
-        "last_updated": "2024-12-20 09:45:00"
+        "last_updated": "2024-12-20 09:45:00",
+        "operation": "insert"
     },
     {
         "inventory_id": 7,
@@ -144,7 +150,8 @@
         "safety_stock_level": 3000,
         "inventory_status": "In Stock",
         "last_restock_date": "2024-12-19",
-        "last_updated": "2024-12-20 15:00:00"
+        "last_updated": "2024-12-20 15:00:00",
+        "operation": "insert"
     },
     {
         "inventory_id": 8,
@@ -165,7 +172,8 @@
         "safety_stock_level": 1250,
         "inventory_status": "In Stock",
         "last_restock_date": "2024-12-16",
-        "last_updated": "2024-12-20 12:10:00"
+        "last_updated": "2024-12-20 12:10:00",
+        "operation": "insert"
     },
     {
         "inventory_id": 9,
@@ -186,7 +194,8 @@
         "safety_stock_level": 1750,
         "inventory_status": "In Stock",
         "last_restock_date": "2024-12-12",
-        "last_updated": "2024-12-20 17:30:00"
+        "last_updated": "2024-12-20 17:30:00",
+        "operation": "insert"
     },
     {
         "inventory_id": 10,
@@ -207,7 +216,8 @@
         "safety_stock_level": 2000,
         "inventory_status": "In Stock",
         "last_restock_date": "2024-12-13",
-        "last_updated": "2024-12-20 14:45:00"
+        "last_updated": "2024-12-20 14:45:00",
+        "operation": "insert"
     },
     {
         "inventory_id": 11,
@@ -228,7 +238,8 @@
         "safety_stock_level": 1000,
         "inventory_status": "Low Stock",
         "last_restock_date": "2024-12-01",
-        "last_updated": "2024-12-20 16:15:00"
+        "last_updated": "2024-12-20 16:15:00",
+        "operation": "insert"
     },
     {
         "inventory_id": 12,
@@ -249,6 +260,7 @@
         "safety_stock_level": 2500,
         "inventory_status": "In Stock",
         "last_restock_date": "2024-12-20",
-        "last_updated": "2024-12-20 18:00:00"
+        "last_updated": "2024-12-20 18:00:00",
+        "operation": "insert"
     }
 ]

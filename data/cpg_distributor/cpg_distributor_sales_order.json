@@ -5,7 +5,8 @@
         "order_date": "2024-11-09",
         "expected_delivery_date": "2024-11-25",
         "order_total_amount": 1975.0,
-        "currency": "USD"
+        "currency": "USD",
+        "operation": "insert"
     },
     {
         "sales_order_id": 2,
@@ -13,7 +14,8 @@
         "order_date": "2024-10-15",
         "expected_delivery_date": "2024-11-01",
         "order_total_amount": 2205.0,
-        "currency": "USD"
+        "currency": "USD",
+        "operation": "insert"
     },
     {
         "sales_order_id": 3,
@@ -21,7 +23,8 @@
         "order_date": "2024-11-03",
         "expected_delivery_date": "2024-11-20",
         "order_total_amount": 2011.0,
-        "currency": "USD"
+        "currency": "USD",
+        "operation": "insert"
     },
     {
         "sales_order_id": 4,
@@ -29,7 +32,8 @@
         "order_date": "2024-12-07",
         "expected_delivery_date": "2024-12-18",
         "order_total_amount": 2445.0,
-        "currency": "USD"
+        "currency": "USD",
+        "operation": "insert"
     },
     {
         "sales_order_id": 5,
@@ -37,7 +41,8 @@
         "order_date": "2024-09-28",
         "expected_delivery_date": "2024-10-15",
         "order_total_amount": 2070.0,
-        "currency": "USD"
+        "currency": "USD",
+        "operation": "insert"
     },
     {
         "sales_order_id": 6,
@@ -45,7 +50,8 @@
         "order_date": "2024-10-07",
         "expected_delivery_date": "2024-10-25",
         "order_total_amount": 1896.5,
-        "currency": "USD"
+        "currency": "USD",
+        "operation": "insert"
     },
     {
         "sales_order_id": 7,
@@ -53,7 +59,8 @@
         "order_date": "2024-12-19",
         "expected_delivery_date": "2025-01-05",
         "order_total_amount": 1680.0,
-        "currency": "USD"
+        "currency": "USD",
+        "operation": "insert"
     },
     {
         "sales_order_id": 8,
@@ -61,7 +68,8 @@
         "order_date": "2024-11-05",
         "expected_delivery_date": "2024-11-22",
         "order_total_amount": 1485.0,
-        "currency": "USD"
+        "currency": "USD",
+        "operation": "insert"
     },
     {
         "sales_order_id": 9,
@@ -69,7 +77,8 @@
         "order_date": "2024-11-25",
         "expected_delivery_date": "2024-12-10",
         "order_total_amount": 1575.0,
-        "currency": "USD"
+        "currency": "USD",
+        "operation": "insert"
     },
     {
         "sales_order_id": 10,
@@ -77,7 +86,7 @@
         "order_date": "2024-08-29",
         "expected_delivery_date": "2024-09-15",
         "order_total_amount": 1422.8,
-        "currency": "USD"
+        "currency": "USD",
+        "operation": "insert"
     }
 ]
-

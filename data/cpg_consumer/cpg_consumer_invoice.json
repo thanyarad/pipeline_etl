@@ -10,7 +10,8 @@
         "tax_amount": 2.34,
         "net_amount": 29.55,
         "payment_method": "Debit Card",
-        "total_items": 3
+        "total_items": 3,
+        "operation": "insert"
     },
     {
         "invoice_id": 2,
@@ -23,7 +24,8 @@
         "tax_amount": 3.08,
         "net_amount": 40.12,
         "payment_method": "Credit Card",
-        "total_items": 3
+        "total_items": 3,
+        "operation": "insert"
     },
     {
         "invoice_id": 3,
@@ -36,7 +38,8 @@
         "tax_amount": 2.54,
         "net_amount": 32.52,
         "payment_method": "Debit Card",
-        "total_items": 3
+        "total_items": 3,
+        "operation": "insert"
     },
     {
         "invoice_id": 4,
@@ -49,7 +52,8 @@
         "tax_amount": 2.23,
         "net_amount": 28.9,
         "payment_method": "Cash",
-        "total_items": 3
+        "total_items": 3,
+        "operation": "insert"
     },
     {
         "invoice_id": 5,
@@ -62,7 +66,8 @@
         "tax_amount": 2.06,
         "net_amount": 26.77,
         "payment_method": "Credit Card",
-        "total_items": 2
+        "total_items": 2,
+        "operation": "insert"
     },
     {
         "invoice_id": 6,
@@ -75,7 +80,8 @@
         "tax_amount": 3.82,
         "net_amount": 49.05,
         "payment_method": "Credit Card",
-        "total_items": 3
+        "total_items": 3,
+        "operation": "insert"
     },
     {
         "invoice_id": 7,
@@ -88,7 +94,8 @@
         "tax_amount": 2.35,
         "net_amount": 30.19,
         "payment_method": "Cash",
-        "total_items": 3
+        "total_items": 3,
+        "operation": "insert"
     },
     {
         "invoice_id": 8,
@@ -101,7 +108,8 @@
         "tax_amount": 1.95,
         "net_amount": 25.04,
         "payment_method": "Wallet",
-        "total_items": 2
+        "total_items": 2,
+        "operation": "insert"
     },
     {
         "invoice_id": 9,
@@ -114,7 +122,8 @@
         "tax_amount": 2.13,
         "net_amount": 27.31,
         "payment_method": "Wallet",
-        "total_items": 3
+        "total_items": 3,
+        "operation": "insert"
     },
     {
         "invoice_id": 10,
@@ -127,6 +136,7 @@
         "tax_amount": 2.25,
         "net_amount": 29.14,
         "payment_method": "Bank Transfer",
-        "total_items": 3
+        "total_items": 3,
+        "operation": "insert"
     }
 ]
